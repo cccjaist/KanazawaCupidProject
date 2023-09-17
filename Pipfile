@@ -9,6 +9,8 @@ speechrecognition = "*"
 [dev-packages]
 speechrecognition = "*"
 pyaudio = "*"
+requests = "*"
+simpleaudio = "*"
 
 [requires]
 python_version = "3.10"
