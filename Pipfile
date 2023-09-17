@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+speechrecognition = "*"
+
+[dev-packages]
+speechrecognition = "*"
+pyaudio = "*"
+requests = "*"
+simpleaudio = "*"
+
+[requires]
+python_version = "3.10"
