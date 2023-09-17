@@ -1,4 +1,5 @@
 import my_speech_recognition as my_sr
+import connect_chatgpt as gpt
 
 def main():
     while True:
@@ -10,5 +11,10 @@ def main():
         my_sr.text_2_wav(text, filename=filename)
         my_sr.play_auido_by_filename(filename)
 
+def test():
+    gpt.init_chatgpt()
+
+
 if __name__ == '__main__':
-    main()
+    test()
+    # main()
