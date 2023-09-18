@@ -18,14 +18,16 @@ def get_response(text):
         model = CHATGPT_MODEL,
         messages = [
             {
+                'role': 'system',
+                'content': '日本語で会話してください'
+            },
+            {
                 'role': 'user',
                 'content': text
             }
         ]
     )
 
-    # TODO : クレジットの登録が必要
-    # URL: https://qiita.com/kotattsu3/items/d6533adc785ee8509e2c
-    ans = res.choices[0].text.strip()
+    ans = res['choices'][0]['message']['content']
     return ans
 

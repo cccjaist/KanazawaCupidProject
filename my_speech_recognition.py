@@ -10,6 +10,7 @@ import speech_recognition as sr
 def get_speech_recognize():
     # 音声入力
     recognizer = sr.Recognizer()
+    
     text = ""
     with sr.Microphone() as source:
         audio = recognizer.listen(source)
