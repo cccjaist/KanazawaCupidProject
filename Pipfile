@@ -13,9 +13,11 @@ requests = "*"
 simpleaudio = "*"
 openai = "*"
 python-dotenv = "*"
+flask = "*"
 
 [requires]
 python_version = "3.10"
 
 [scripts]
 start = "pipenv run python ./main.py"
+dev = "pipenv run python ./test.py"
