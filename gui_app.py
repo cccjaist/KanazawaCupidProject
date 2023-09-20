@@ -1,5 +1,7 @@
 import app_status
 import os
+import time
+from concurrent.futures import ThreadPoolExecutor
 import flet as ft
 
 global character
@@ -9,6 +11,8 @@ max_image_num = {}
 now_image_num = 0
 
 async def main(page: ft.Page):
+
+    # 表情画像の基本設定
     global now_image_num
     img_path, now_image_num = get_image(now_image_num)
     img = ft.Image(
@@ -18,22 +22,26 @@ async def main(page: ft.Page):
         fit=ft.ImageFit.CONTAIN,
     )
     
-    async def change_image(e):
+    async def change_image():
         global now_image_num
-        img_path, now_image_num = get_image(now_image_num)
-        img.src = img_path
-        await page.update_async()
+        while True:
+            img_path, now_image_num = get_image(now_image_num)
+            img.src = img_path
+            await page.update_async()
+            time.sleep(0.6)
 
+    # ページの基本構成の設定
     page.title = "金沢キューピッド"
     page.theme_mode = ft.ThemeMode.LIGHT
     page.padding = 50
     await page.update_async()
-
     question = ft.TextField(label="会話内容")
-    send_button = ft.ElevatedButton("君はどう思う？", on_click=change_image)
-
+    send_button = ft.ElevatedButton("君はどう思う？", on_click=send_message)
     await page.add_async(img, question, send_button)
 
+    # ステータスに応じた標準差分を設定する
+    await change_image()
+    
 def get_image(now_image_num):
     now_image_num += 1
     if now_image_num >= max_image_num[my_status.value]:
