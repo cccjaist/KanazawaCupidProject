@@ -29,6 +29,10 @@ async def main(page: ft.Page):
             img.src = img_path
             await page.update_async()
             time.sleep(0.6)
+    
+    async def send_message(e):
+        global my_status
+        my_status = app_status.Status.THINK
 
     # ページの基本構成の設定
     page.title = "金沢キューピッド"
