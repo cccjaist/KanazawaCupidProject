@@ -13,6 +13,7 @@ requests = "*"
 simpleaudio = "*"
 openai = "*"
 python-dotenv = "*"
+flet = "*"
 
 [requires]
 python_version = "3.10"
