@@ -1,10 +1,11 @@
 import my_speech_recognition as my_sr
 import connect_chatgpt as chatgpt
-import status
+import app_status
 import gui_app as app
 
 def main():
     init()
+    pass
 
     # while True:
     # 音声をテキスト情報に変換
@@ -21,8 +22,10 @@ def main():
     my_sr.play_auido_by_filename(filename)
 
 def init():
-    app.my_status = status.NORMAL
+    app.my_status = app_status.Status.NORMAL
+    app.character = app_status.Character.ZUNDAMON
     chatgpt.init()
+    app.init()
     app.start()
 
 if __name__ == '__main__':
