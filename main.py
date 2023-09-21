@@ -10,7 +10,6 @@ def main():
 
     executor = ThreadPoolExecutor(max_workers=2)
     executor.submit(test)
-    # executor.submit(monitor_service_finish)
 
     start()
 
@@ -21,12 +20,16 @@ def init():
     app.init()
 
 def start():
-    print("start 2")
     app.start()
 
 def monitor_voice():
     while True:
-    # 音声をテキスト情報に変換
+        # アプリでseevice_stop_flagが動作したらサービスが終了する
+        if (app.service_stop_flag):
+            print("finish")
+            break
+        
+        # 音声をテキスト情報に変換
         text = my_sr.get_speech_recognize()
         print(text) 
 

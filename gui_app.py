@@ -1,12 +1,12 @@
 import app_status
 import os
 import time
-from concurrent.futures import ThreadPoolExecutor
 import flet as ft
 
 global character
 global my_status
 global service_stop_flag
+global service_progress
 
 # main.pyでchatgptを呼び出すための設定
 global chatgpt_flag
@@ -93,7 +93,7 @@ async def main(page: ft.Page):
     finish_dialog = ft.AlertDialog(
         modal=True,
         title=ft.Text("金沢キューピッド"),
-        content=ft.Text("サービスを終了しました。×を押して終了してください。"),
+        content=ft.Text("サービスを終了しました。×を押してアプリを終了してください。"),
     )
 
     await page.add_async(img, question, send_button, finish_button)
