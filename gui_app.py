@@ -84,4 +84,5 @@ def init():
     chatgpt_text = ""
 
 def start():
+    print("hoyohooy")
     ft.app(target=main)
