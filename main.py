@@ -10,6 +10,7 @@ def main():
 
     executor = ThreadPoolExecutor(max_workers=2)
     executor.submit(test)
+    # executor.submit(monitor_service_finish)
 
     start()
 
@@ -40,6 +41,9 @@ def monitor_voice():
 
 def test():
     while True:
+        if (app.service_stop_flag):
+            print("finish")
+            break
         print("aaaaaaaaa")
         time.sleep(3)
 

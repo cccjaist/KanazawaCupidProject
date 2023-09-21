@@ -6,6 +6,7 @@ import flet as ft
 
 global character
 global my_status
+global service_stop_flag
 
 # main.pyでchatgptを呼び出すための設定
 global chatgpt_flag
@@ -16,7 +17,7 @@ now_image_num = 0
 
 async def main(page: ft.Page):
 
-    # 表情が0.6秒沖ごとにコマ送りで変化する
+    # 表情が0.6秒ごとにコマ送りで変化する
     async def change_image():
         global now_image_num
         while True:
@@ -38,6 +39,26 @@ async def main(page: ft.Page):
         print(chatgpt_text)
         print(chatgpt_flag)
 
+    # 終了確認のダイアログが開く
+    def open_finish_dialog(e):
+        page.dialog = finish_confilm_dialog
+        finish_confilm_dialog.open = True
+        page.update_async()
+
+    def finish_service(e):
+        global service_stop_flag
+        service_stop_flag = True
+        # TODO: destroy()メソッドが動作しない
+        # page.window_destroy()
+        finish_confilm_dialog.open = False
+        page.dialog = finish_dialog
+        finish_dialog.open = True
+        page.update_async()
+
+    def cancel_finish(e):
+        finish_confilm_dialog.open = False
+        page.update_async()
+
     # 表情画像の基本設定
     global now_image_num
     img_path, now_image_num = get_image(now_image_num)
@@ -55,7 +76,27 @@ async def main(page: ft.Page):
     await page.update_async()
     question = ft.TextField(label="会話内容")
     send_button = ft.ElevatedButton("君はどう思う？", on_click=send_message)
-    await page.add_async(img, question, send_button)
+    
+    # サービスを終了するためのコンポーネント
+    finish_button = ft.ElevatedButton("会話を終了する", on_click=open_finish_dialog)
+    finish_confilm_dialog = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("金沢キューピッド"),
+        content=ft.Text("サービスを終了してもよいですか？"),
+        actions=[
+            ft.TextButton("はい", on_click=finish_service),
+            ft.TextButton("いいえ", on_click=cancel_finish),
+        ],
+        actions_alignment=ft.MainAxisAlignment.END,
+        on_dismiss=lambda e: print("Modal dialog dismissed!"),
+    )
+    finish_dialog = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("金沢キューピッド"),
+        content=ft.Text("サービスを終了しました。×を押して終了してください。"),
+    )
+
+    await page.add_async(img, question, send_button, finish_button)
 
     # ステータスに応じた標準差分を設定する
     await change_image()
@@ -77,12 +118,17 @@ def init():
         print(path)
         image_num =  sum(os.path.isfile(os.path.join(path,name)) for name in os.listdir(path))
         max_image_num[status.value] = image_num
-    print(max_image_num)
 
     # chatgptを呼び出すための設定を初期化する
+    global chatgpt_flag
+    global chatgpt_text
     chatgpt_flag = False
     chatgpt_text = ""
 
+    # サービスを終了させるためのフラグをセットする
+    # 初期値はFalse
+    global service_stop_flag
+    service_stop_flag = False
+
 def start():
-    print("hoyohooy")
     ft.app(target=main)
