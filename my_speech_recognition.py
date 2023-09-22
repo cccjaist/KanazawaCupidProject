@@ -6,23 +6,23 @@ import json
 import requests
 import simpleaudio
 import speech_recognition as sr
+import manage_log as log
 
 def get_speech_recognize():
     # 音声入力
     recognizer = sr.Recognizer()
     
-    text = ""
+    text = ''
     with sr.Microphone() as source:
         audio = recognizer.listen(source)
 
     try:
         # Google Web Speech APIで音声認識
-        text = recognizer.recognize_google(audio, language="ja-JP")
+        text = recognizer.recognize_google(audio, language='ja-JP')
     except sr.UnknownValueError:
-        print("Google Web Speech APIは音声を認識できませんでした。")
+        log.write_error_log('Google Web Speech APIは音声を認識できませんでした。')
     except sr.RequestError as e:
-        print("GoogleWeb Speech APIに音声認識を要求できませんでした;"
-            " {0}".format(e))
+        log.write_error_log('GoogleWeb Speech APIに音声認識を要求できませんでした。')
     
     return text
 
@@ -38,7 +38,7 @@ def text_2_wav(text, speaker_id=8, max_retry=20, filename='audio.wav'):
             query_data = response.json()
             break
     else:
-        raise ConnectionError('リトライ回数が上限に到達しました。')
+        log.write_error_log('リトライ回数が上限に到達しました。')
 
     # 音声合成データの作成して、wavファイルに保存
     synth_payload = {"speaker": speaker_id}
@@ -52,8 +52,7 @@ def text_2_wav(text, speaker_id=8, max_retry=20, filename='audio.wav'):
                 fp.write(response.content)
             break
     else:
-        raise ConnectionError('リトライ回数が上限に到達しました。')
-
+        log.write_error_log('リトライ回数が上限に到達しました。'    )
 
 def play_auido_by_filename(filename: str):
     # 保存したwavファイルを、再生
