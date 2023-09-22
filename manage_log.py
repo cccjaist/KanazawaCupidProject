@@ -25,6 +25,7 @@ def init():
 
 # エラーファイルに
 def write_error_log(log):
+    print(log)
     error_logzero.logfile(ERROR_LOG_PATH + error_file_name)
     error_logzero.logger.debug(log)
 
