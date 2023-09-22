@@ -11,7 +11,7 @@ def get_speech_recognize():
     # 音声入力
     recognizer = sr.Recognizer()
     
-    text = ""
+    text = ''
     with sr.Microphone() as source:
         audio = recognizer.listen(source)
 

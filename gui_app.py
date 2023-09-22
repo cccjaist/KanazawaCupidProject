@@ -20,40 +20,38 @@ async def main(page: ft.Page):
     # 表情が0.6秒ごとにコマ送りで変化する
     async def change_image():
         global now_image_num
-        while True:
+        while not service_stop_flag:
             img_path, now_image_num = get_image(now_image_num)
             img.src = img_path
             await page.update_async()
             time.sleep(0.6)
     
-    # ボタンがクリックされたらchatgptにメッセージを送信し、考えるモードに入る
-    async def send_message(e):
+    # ボタンがクリックされたらchatgptにメッセージを送信する
+    async def call_chatgpt(e):
         global my_status
         global chatgpt_flag
         global chatgpt_text
 
-        my_status = app_status.Status.THINK
         chatgpt_text = question.value
         chatgpt_flag = True
-
-        print(chatgpt_text)
-        print(chatgpt_flag)
-
+    
     # 終了確認のダイアログが開く
-    def open_finish_dialog(e):
+    async def open_finish_dialog(e):
         page.dialog = finish_confilm_dialog
         finish_confilm_dialog.open = True
-        page.update_async()
+        await page.update_async()
 
-    def finish_service(e):
+    async def finish_service(e):
         global service_stop_flag
         service_stop_flag = True
-        # TODO: destroy()メソッドが動作しない
-        # page.window_destroy()
+        
         finish_confilm_dialog.open = False
         page.dialog = finish_dialog
         finish_dialog.open = True
-        page.update_async()
+        await page.update_async()
+
+        # TODO: destroy()メソッドが動作しない
+        # await page.window_destroy()
 
     def cancel_finish(e):
         finish_confilm_dialog.open = False
@@ -75,7 +73,7 @@ async def main(page: ft.Page):
     page.padding = 50
     await page.update_async()
     question = ft.TextField(label="会話内容")
-    send_button = ft.ElevatedButton("君はどう思う？", on_click=send_message)
+    send_button = ft.ElevatedButton("君はどう思う？", on_click=call_chatgpt)
     
     # サービスを終了するためのコンポーネント
     finish_button = ft.ElevatedButton("会話を終了する", on_click=open_finish_dialog)
@@ -88,7 +86,6 @@ async def main(page: ft.Page):
             ft.TextButton("いいえ", on_click=cancel_finish),
         ],
         actions_alignment=ft.MainAxisAlignment.END,
-        on_dismiss=lambda e: print("Modal dialog dismissed!"),
     )
     finish_dialog = ft.AlertDialog(
         modal=True,
@@ -107,7 +104,6 @@ def get_image(now_image_num):
         now_image_num = 0
     
     img_path = f'img/{character.value}/{my_status.value}/{character.value}_{my_status.value}_{now_image_num}.png'
-    print(img_path)
     return img_path, now_image_num
 
 def init():
@@ -115,7 +111,6 @@ def init():
     # 例: max_image_num = {'normal':2, 'speak':3, 'think':2}
     for status in app_status.Status:
         path = f'img/{character.value}/{status.value}'
-        print(path)
         image_num =  sum(os.path.isfile(os.path.join(path,name)) for name in os.listdir(path))
         max_image_num[status.value] = image_num
 
