@@ -63,6 +63,8 @@ def send_message_to_chatgpt(message):
     
     app.my_status = app_status.Status.THINK
     time.sleep(10)
+
+    # TODO: chatgptに流す際はこのreturnを外す
     return "hogehoge"
     res = chatgpt.get_response(message)
     return res
