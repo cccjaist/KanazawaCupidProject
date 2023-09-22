@@ -8,6 +8,9 @@ import datetime
 message_file_name = ''
 error_file_name = ''
 
+message_logzero = logzero
+error_logzero = logzero
+
 # ログファイルを作成する
 def init():
     global message_file_name
@@ -16,17 +19,15 @@ def init():
     message_file_name = 'message_' + now + '.log'
     error_file_name = 'error_' + now + '.log'
 
+    log_format = '%(message)s'
+    formatter = message_logzero.LogFormatter(fmt=log_format)
+    message_logzero.formatter(formatter)
+
 # エラーファイルに
 def write_error_log(log):
-    log_format = '[%(levelname)1.1s %(asctime)s %(funcName)s:%(lineno)d] %(message)s'
-    formatter = logzero.LogFormatter(fmt=log_format)
-    logzero.formatter(formatter)
-    logzero.logfile(ERROR_LOG_PATH + error_file_name)
-    logzero.logger.error(log)
+    error_logzero.logfile(ERROR_LOG_PATH + error_file_name)
+    error_logzero.logger.debug(log)
 
 def write_message_log(log):
-    log_format = '%(message)s'
-    formatter = logzero.LogFormatter(fmt=log_format)
-    logzero.formatter(formatter)
-    logzero.logfile(MESSAGE_LOG_PATH + message_file_name)
-    logzero.logger.debug(log)
+    message_logzero.logfile(MESSAGE_LOG_PATH + message_file_name)
+    message_logzero.logger.debug(log)
