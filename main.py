@@ -4,7 +4,10 @@ import connect_chatgpt as chatgpt
 import app_status
 import gui_app as app
 import manage_log as log
+import manage_threads as thread
 import time
+
+global executor
 
 def main():
     # サービスに必要な情報を初期化
@@ -12,9 +15,10 @@ def main():
 
     # 音声入力を監視する処理とアプリからの入力を監視する処理
     # マルチスレッドで呼び出す
+    global executor
     executor = ThreadPoolExecutor()
     executor.submit(monitor_voice)
-    executor.submit(send_message_form_app)
+    # executor.submit(send_message_from_app)
 
     # サービスの開始
     start()
@@ -25,6 +29,7 @@ def init():
     app.character = app_status.Character.ZUNDAMON
     log.init()
     chatgpt.init()
+    my_sr.init()
     app.init()
 
 # サービスの開始
@@ -39,11 +44,13 @@ def monitor_voice():
         if (app.service_stop_flag):
             break
         
-        # 音声をテキスト情報に変換
-        send_message_to_chatgpt(my_sr.get_speech_recognize())
+        # 音声をテキスト情報に変換しログに残す
+        my_sr.speech_recognize(executor, log)
+
+        # send_message_to_chatgpt()
 
 # アプリケーションのボタンによるchatGPTの呼び出しを監視する
-def send_message_form_app():
+def send_message_from_app():
     while True:
         # アプリでservice_stop_flagが動作したらサービスが終了する
         if (app.service_stop_flag):
@@ -83,7 +90,7 @@ def speak_message(message):
 
     # 音声データのファイル名
     filename = 'audio.wav'
-    my_sr.text_2_wav(message, filename=filename)
+    my_sr.text_2_wav(message, log, filename=filename)
     my_sr.play_auido_by_filename(filename)
 
 if __name__ == '__main__':
