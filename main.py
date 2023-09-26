@@ -4,7 +4,6 @@ import connect_chatgpt as chatgpt
 import app_status
 import gui_app as app
 import manage_log as log
-import manage_threads as thread
 import time
 
 global executor
