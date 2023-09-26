@@ -6,28 +6,34 @@ import json
 import requests
 import simpleaudio
 import speech_recognition as sr
-import manage_log as log
 
-def get_speech_recognize():
-    # 音声入力
-    recognizer = sr.Recognizer()
+global recognizer
+
+# 会話の音声を聞いて変換処理に受け渡す処理
+def speech_recognize(executor, log):
+    global recognizer
     
-    text = ''
     with sr.Microphone() as source:
+        print("listening…")
         audio = recognizer.listen(source)
 
+    # 音声認識処理をスレッドに追加する
+    executor.submit(recognize, audio, log)
+
+# Google Web Speech APIで音声認識し、それをログに追加する処理
+def recognize(audio, log):
+    text = ''
     try:
-        # Google Web Speech APIで音声認識
+        # Google Web Speech APIで音声認識を行う
         text = recognizer.recognize_google(audio, language='ja-JP')
+        log.write_message_log(text)
     except sr.UnknownValueError:
         log.write_error_log('Google Web Speech APIは音声を認識できませんでした。')
     except sr.RequestError as e:
         log.write_error_log('GoogleWeb Speech APIに音声認識を要求できませんでした。')
-    
-    return text
 
 # TODO: spkaker_id用の設定ファイル作る
-def text_2_wav(text, speaker_id=8, max_retry=20, filename='audio.wav'):
+def text_2_wav(text, log, speaker_id=8, max_retry=20, filename='audio.wav'):
     # 音声合成のための、クエリを作成
     query_payload = {"text": text, "speaker": speaker_id}
     for query_i in range(max_retry):
@@ -59,3 +65,8 @@ def play_auido_by_filename(filename: str):
     wav_obj = simpleaudio.WaveObject.from_wave_file(filename)
     play_obj = wav_obj.play()
     play_obj.wait_done()
+
+def init():
+    global recognizer
+    print("init…")
+    recognizer = sr.Recognizer()
