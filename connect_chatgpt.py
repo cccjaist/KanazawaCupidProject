@@ -26,7 +26,7 @@ def get_response(message):
         messages = [
             {
                 'role': 'system',
-                'content': 'あなたは異なる立場の2人の仲を取り持つ仲介人です。'
+                'content': 'あなたは異なる立場の2人の仲を取り持つ仲人です。'
             },
             {
                 'role': 'user',

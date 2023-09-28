@@ -13,7 +13,7 @@ def main():
         # 音声入力を監視する処理とアプリからの入力を監視する処理
         # マルチスレッドで呼び出す
         executor = ThreadPoolExecutor(max_workers=100)
-        executor.submit(check_send_message)
+        executor.submit(check_send_message, executor)
         executor.submit(monitor_voice, executor)
 
         # サービスの開始
@@ -51,7 +51,7 @@ def get_message():
     return message_log
 
 # chatGPTの呼び出しを監視する
-def check_send_message():
+def check_send_message(executor):
     while True:
         send_message = ''
 
@@ -60,6 +60,10 @@ def check_send_message():
             log.delete_tmp_file()
             break
         
+        # print('----------')
+        # print(app.chatgpt_flag)
+        # print(my_sr.chatgpt_flag)
+
         # chatGPTを呼び出すフラグが立ったら呼び出しを行う
         if (app.chatgpt_flag):
             print('hogehoge')
@@ -78,21 +82,29 @@ def check_send_message():
 
             # chatGPTからの返答を取得し、それを音声出力する  
             response = chatgpt.get_response(send_message)
-            speak_message(response)
+            executor.submit(speak_message, response)
+            
             # tmpファイルの会話内容をlogに統合する
             log.attach_message_log()
 
 # chatGPTからの返答を音声出力する
 def speak_message(message):
+    print('res')
+    print(message)
+
     # アプリのステータスをSPEAKにする
     app.my_status = app_status.Status.SPEAK
 
     # 音声データのファイル名
     filename = 'audio.wav'
-    my_sr.text_2_wav(message, log, filename=filename)
-    my_sr.play_auido_by_filename(filename)
-    app.my_status = app_status.Status.NORMAL
-    app.finish_disp_progress_flag = False
+    try:
+        my_sr.text_2_wav(message, log, filename=filename)
+        my_sr.play_auido_by_filename(filename)
+        app.my_status = app_status.Status.NORMAL
+        app.finish_disp_progress_flag = False
+    except Exception as e:
+        print(e)
+    
 
 if __name__ == '__main__':
     main()
