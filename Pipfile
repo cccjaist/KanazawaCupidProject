@@ -4,6 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+speechrecognition = "*"
+pyaudio = "*"
+requests = "*"
+simpleaudio = "*"
+openai = "*"
+python-dotenv = "*"
+flet = "*"
+datetime = "*"
+logzero = "*"
 
 [dev-packages]
 speechrecognition = "*"
@@ -15,9 +24,6 @@ python-dotenv = "*"
 flet = "*"
 datetime = "*"
 logzero = "*"
-
-[requires]
-python_version = "3.10"
 
 [scripts]
 start = "pipenv run python ./main.py"

@@ -1,7 +1,3 @@
-# 参考にしたサイト
-# https://miyukimedaka.com/2020/06/14/0144-speech-recognition-synthesis/
-# https://zero-cheese.com/11452/
-
 import json
 import requests
 import simpleaudio
@@ -18,7 +14,7 @@ def speech_recognize(executor, log):
     global recognizer
     with sr.Microphone() as source:
         print('listen…')
-        audio = recognizer.listen(source, phrase_time_limit=3)
+        audio = recognizer.listen(source, phrase_time_limit=6)
 
         # 音声認識処理をスレッドに追加する
         executor.submit(recognize, audio, log)
@@ -62,7 +58,7 @@ def text_2_wav(text, log, speaker_id=8, max_retry=20, filename='audio.wav'):
         response = requests.post("http://localhost:50021/synthesis",
                                  params=synth_payload,
                                  data=json.dumps(query_data),
-                                 timeout=10)
+                                 timeout=100)
         if response.status_code == 200:
             with open(filename, "wb") as fp:
                 fp.write(response.content)
@@ -72,6 +68,7 @@ def text_2_wav(text, log, speaker_id=8, max_retry=20, filename='audio.wav'):
 
 def play_auido_by_filename(filename: str):
     # 保存したwavファイルを、再生
+    print('playing…')
     wav_obj = simpleaudio.WaveObject.from_wave_file(filename)
     play_obj = wav_obj.play()
     play_obj.wait_done()

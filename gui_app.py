@@ -121,7 +121,7 @@ async def main(page: ft.Page):
     # ステータスに応じた標準差分を設定する
     await change_image()
     # プログレスバーを表示する
-    await control_progress_bar()
+    # await control_progress_bar()
     
 def get_image(now_image_num):
     now_image_num += 1
