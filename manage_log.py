@@ -34,6 +34,8 @@ def write_error_log(log):
 
 # 会話内容をtmpファイルに追加する
 def write_message_log(log):
+    if log == '':
+        return
     message_logzero.logfile(get_tmp_file_name(), encoding='utf-8')
     message_logzero.logger.debug(log)
 

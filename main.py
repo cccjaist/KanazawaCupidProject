@@ -87,6 +87,7 @@ def speak_message(message):
     filename = 'audio.wav'
     my_sr.text_2_wav(message, log, filename=filename)
     my_sr.play_auido_by_filename(filename)
+    app.my_status = app_status.Status.NORMAL
 
 if __name__ == '__main__':
     main()
