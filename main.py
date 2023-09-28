@@ -46,7 +46,7 @@ def monitor_voice(executor):
 # chatgptに送信するメッセージ内容を取得する
 def get_message():
     message_log = ''
-    with open(log.get_tmp_file_name()) as f:
+    with open(log.get_tmp_file_name(), encoding='utf-8') as f:
         message_log = f.read()
     return message_log
 
@@ -62,14 +62,18 @@ def check_send_message():
         
         # chatGPTを呼び出すフラグが立ったら呼び出しを行う
         if (app.chatgpt_flag):
+            print('hogehoge')
             app.chatgpt_flag = False
             send_message = get_message()
+            print(send_message)
         elif (my_sr.chatgpt_flag):
             my_sr.chatgpt_flag = False
             send_message = get_message()
 
         # chatGPTの返答待ちの場合は送信処理を行わない
         if send_message != '' and app.my_status != app_status.Status.THINK:
+            print('送信処理開始')
+            app.start_disp_progress_flag = True
             app.my_status = app_status.Status.THINK
 
             # chatGPTからの返答を取得し、それを音声出力する  
@@ -88,6 +92,7 @@ def speak_message(message):
     my_sr.text_2_wav(message, log, filename=filename)
     my_sr.play_auido_by_filename(filename)
     app.my_status = app_status.Status.NORMAL
+    app.finish_disp_progress_flag = False
 
 if __name__ == '__main__':
     main()
