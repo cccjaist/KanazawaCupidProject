@@ -1,11 +1,10 @@
-
 MESSAGE_LOG_PATH = 'logs/message_logs/'
 ERROR_LOG_PATH = 'logs/error_logs/'
 
 import logzero
 import datetime
 
-message_file_name = ''
+global message_file_name
 error_file_name = ''
 
 message_logzero = logzero
@@ -32,3 +31,6 @@ def write_error_log(log):
 def write_message_log(log):
     message_logzero.logfile(MESSAGE_LOG_PATH + message_file_name)
     message_logzero.logger.debug(log)
+
+def get_file_name():
+    return MESSAGE_LOG_PATH + message_file_name
