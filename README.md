@@ -11,3 +11,4 @@ $ pip install pipenv
 OPENAI_API_KEY={chatGPTのAPIKey}
 OPENAI_ORGANIZATION={chatGPTのOrganization Key}
 ```
+5. VOICE VOXをダウンロードし、立ち上げておく。
