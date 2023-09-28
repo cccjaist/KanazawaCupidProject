@@ -19,7 +19,7 @@ def init():
 def get_response(message):
 
     # TODO: 本番ではここのreturnを消去する
-    return 'ほげほげ'
+    # return 'ほげほげ'
 
     res = openai.ChatCompletion.create(
         model = CHATGPT_MODEL,

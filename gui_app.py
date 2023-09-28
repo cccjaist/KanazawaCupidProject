@@ -9,6 +9,9 @@ global my_status
 global service_stop_flag
 global service_progress
 
+global start_disp_progress_flag
+global finish_disp_progress_flag
+
 # main.pyでchatgptを呼び出すための設定
 global chatgpt_flag
 
@@ -25,6 +28,17 @@ async def main(page: ft.Page):
             img.src = img_path
             await page.update_async()
             time.sleep(0.6)
+    
+    async def control_progress_bar():
+        global my_status
+        print('check')
+        while not service_stop_flag:
+            if start_disp_progress_flag:
+                page.add(progress_bar)
+                start_disp_progress_flag = False
+            if finish_disp_progress_flag:
+                page.remove(progress_bar)
+                finish_disp_progress_flag = False            
 
     # 会話内容をログに追加する
     async def add_message(e):
@@ -33,7 +47,8 @@ async def main(page: ft.Page):
         log.write_message_log(message)
     
     # 会話内容をログに追加してchatgptにメッセージを送信する
-    async def call_chatgpt(e):
+    def call_chatgpt(e):
+        print('よばれた')
         global chatgpt_flag
         message = question.value
         question.value = ''
@@ -68,8 +83,8 @@ async def main(page: ft.Page):
     img_path, now_image_num = get_image(now_image_num)
     img = ft.Image(
         src = img_path,
-        width=200,
-        height=200,
+        width=300,
+        height=300,
         fit=ft.ImageFit.CONTAIN,
     )
 
@@ -81,6 +96,7 @@ async def main(page: ft.Page):
     question = ft.TextField(label="会話内容")
     add_button = ft.ElevatedButton("会話を追加", on_click=add_message)
     send_button = ft.ElevatedButton("君はどう思う？", on_click=call_chatgpt)
+    progress_bar = ft.ProgressBar(width=400, color="amber", bgcolor="#eeeeee")
     
     # サービスを終了するためのコンポーネント
     finish_button = ft.ElevatedButton("会話を終了する", on_click=open_finish_dialog)
@@ -100,10 +116,12 @@ async def main(page: ft.Page):
         content=ft.Text("サービスを終了しました。×を押してアプリを終了してください。"),
     )
 
-    await page.add_async(img, question, add_button, send_button, finish_button)
+    await page.add_async(img, question, ft.Row([add_button, send_button, finish_button]))
 
     # ステータスに応じた標準差分を設定する
     await change_image()
+    # プログレスバーを表示する
+    await control_progress_bar()
     
 def get_image(now_image_num):
     now_image_num += 1
@@ -130,5 +148,15 @@ def init():
     global service_stop_flag
     service_stop_flag = False
 
+    # プログレスバーを表示するフラグをセットする
+    # 初期値はFalse
+    global start_disp_progress_flag
+    global finish_disp_progress_flag
+    start_disp_progress_flag = False
+    finish_disp_progress_flag = False
+
 def start():
-    ft.app(target=main)
+    try:
+        ft.app(target=main)
+    except Exception as e:
+        print(e)

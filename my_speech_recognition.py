@@ -17,7 +17,8 @@ global chatgpt_flag
 def speech_recognize(executor, log):
     global recognizer
     with sr.Microphone() as source:
-        audio = recognizer.listen(source)
+        print('listen…')
+        audio = recognizer.listen(source, phrase_time_limit=3)
 
         # 音声認識処理をスレッドに追加する
         executor.submit(recognize, audio, log)
