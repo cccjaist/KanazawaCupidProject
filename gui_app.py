@@ -29,12 +29,14 @@ async def main(page: ft.Page):
     # 会話内容をログに追加する
     async def add_message(e):
         message = question.value
+        question.value = ''
         log.write_message_log(message)
     
     # 会話内容をログに追加してchatgptにメッセージを送信する
     async def call_chatgpt(e):
         global chatgpt_flag
         message = question.value
+        question.value = ''
         log.write_message_log(message)
 
         chatgpt_flag = True

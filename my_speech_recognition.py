@@ -36,7 +36,8 @@ def recognize(audio, log):
                 chatgpt_flag = True
                 break
     except sr.UnknownValueError:
-        log.write_error_log('Google Web Speech APIは音声を認識できませんでした。')
+        pass
+        # log.write_error_log('Google Web Speech APIは音声を認識できませんでした。')
     except sr.RequestError as e:
         log.write_error_log('GoogleWeb Speech APIに音声認識を要求できませんでした。')
 
