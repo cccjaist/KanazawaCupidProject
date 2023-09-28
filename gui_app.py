@@ -83,8 +83,8 @@ async def main(page: ft.Page):
     img_path, now_image_num = get_image(now_image_num)
     img = ft.Image(
         src = img_path,
-        width=200,
-        height=500,
+        width=300,
+        height=300,
         fit=ft.ImageFit.CONTAIN,
     )
 
