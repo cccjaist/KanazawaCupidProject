@@ -2,7 +2,11 @@
 
 ## 準備
 1. pythonをインストール
-2. pipenvをインストール
+
+リンク： https://www.python.org/downloads/
+最新バージョンをダウンロード
+  
+3. pipenvをインストール
 ```
 pip install pipenv
 pipenv install
