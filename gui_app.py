@@ -1,6 +1,7 @@
 import app_status
 import os
 import time
+import manage_log as log
 import flet as ft
 
 global character
@@ -10,7 +11,6 @@ global service_progress
 
 # main.pyでchatgptを呼び出すための設定
 global chatgpt_flag
-global chatgpt_text
 
 max_image_num = {}
 now_image_num = 0
@@ -25,14 +25,20 @@ async def main(page: ft.Page):
             img.src = img_path
             await page.update_async()
             time.sleep(0.6)
-    
-    # ボタンがクリックされたらchatgptにメッセージを送信する
-    async def call_chatgpt(e):
-        global my_status
-        global chatgpt_flag
-        global chatgpt_text
 
-        chatgpt_text = question.value
+    # 会話内容をログに追加する
+    async def add_message(e):
+        message = question.value
+        question.value = ''
+        log.write_message_log(message)
+    
+    # 会話内容をログに追加してchatgptにメッセージを送信する
+    async def call_chatgpt(e):
+        global chatgpt_flag
+        message = question.value
+        question.value = ''
+        log.write_message_log(message)
+
         chatgpt_flag = True
     
     # 終了確認のダイアログが開く
@@ -73,6 +79,7 @@ async def main(page: ft.Page):
     page.padding = 50
     await page.update_async()
     question = ft.TextField(label="会話内容")
+    add_button = ft.ElevatedButton("会話を追加", on_click=add_message)
     send_button = ft.ElevatedButton("君はどう思う？", on_click=call_chatgpt)
     
     # サービスを終了するためのコンポーネント
@@ -93,7 +100,7 @@ async def main(page: ft.Page):
         content=ft.Text("サービスを終了しました。×を押してアプリを終了してください。"),
     )
 
-    await page.add_async(img, question, send_button, finish_button)
+    await page.add_async(img, question, add_button, send_button, finish_button)
 
     # ステータスに応じた標準差分を設定する
     await change_image()
@@ -116,9 +123,7 @@ def init():
 
     # chatgptを呼び出すための設定を初期化する
     global chatgpt_flag
-    global chatgpt_text
     chatgpt_flag = False
-    chatgpt_text = ""
 
     # サービスを終了させるためのフラグをセットする
     # 初期値はFalse
