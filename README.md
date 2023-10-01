@@ -35,7 +35,8 @@ pip install pipenv
 cd {コピーしたパスを張り付ける}
 ```
 
-<img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/5eccc2d6-304a-407c-9be9-a0327198ced4">
+<img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/4b3074c3-bae9-4d7e-9bfc-2972e81b60f3">
+
 <img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/4c529b9c-4af7-478c-83d9-62c8b793dc0d">
 
 3. ダウンロードしたファイルの中に'.env'という名前のファイルを作成する。そして以下の内容を保存する。
