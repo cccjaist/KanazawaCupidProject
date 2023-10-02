@@ -161,5 +161,5 @@ cython_debug/
 
 *.wav
 test.py
-logs/error_logs/*.log
-logs/message_logs/*.log
+# logs/error_logs/*.log
+# logs/message_logs/*.log
