@@ -35,5 +35,6 @@ def get_response(message):
         ]
     )
 
+    log.write_response_log(res)
     ans = res['choices'][0]['message']['content']
     return ans

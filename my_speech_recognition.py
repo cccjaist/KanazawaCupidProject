@@ -3,6 +3,7 @@ import requests
 import simpleaudio
 import speech_recognition as sr
 
+VOICEVOX_ADDRESS = 'http://127.0.0.1:50021/'
 CALLING_CHATGPT_MESSAGE = ['君はどう思う', '君はどうおもう', 'きみはどう思う', 'きみはどうおもう']
 
 global recognizer
@@ -43,7 +44,7 @@ def text_2_wav(text, log, speaker_id=8, max_retry=20, filename='audio.wav'):
     # 音声合成のための、クエリを作成
     query_payload = {'text': text, 'speaker': speaker_id}
     for query_i in range(max_retry):
-        response = requests.post('http://127.0.0.1:50021/audio_query',
+        response = requests.post(VOICEVOX_ADDRESS + 'audio_query',
                                  params=query_payload,
                                  timeout=10)
         if response.status_code == 200:
@@ -55,7 +56,7 @@ def text_2_wav(text, log, speaker_id=8, max_retry=20, filename='audio.wav'):
     # 音声合成データの作成して、wavファイルに保存
     synth_payload = {'speaker': speaker_id}
     for synth_i in range(max_retry):
-        response = requests.post('http://127.0.0.1:50021/synthesis',
+        response = requests.post(VOICEVOX_ADDRESS + 'synthesis',
                                  params=synth_payload,
                                  data=json.dumps(query_data),
                                  timeout=100)
