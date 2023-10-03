@@ -27,7 +27,7 @@ def init():
     app.character = app_status.Character.ZUNDAMON
     log.init()
     my_sr.init()
-    chatgpt.init()
+    chatgpt.init(app_status.Prompt.NORMAL)
     app.init()
 
 # サービスの開始
@@ -64,7 +64,6 @@ def check_send_message(executor):
         if (app.chatgpt_flag):
             app.chatgpt_flag = False
             send_message = get_message()
-            print(send_message)
         if (my_sr.chatgpt_flag):
             my_sr.chatgpt_flag = False
             send_message = get_message()

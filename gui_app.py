@@ -31,7 +31,6 @@ async def main(page: ft.Page):
     
     async def control_progress_bar():
         global my_status
-        print('check')
         while not service_stop_flag:
             if start_disp_progress_flag:
                 page.add(progress_bar)
@@ -48,7 +47,6 @@ async def main(page: ft.Page):
     
     # 会話内容をログに追加してchatgptにメッセージを送信する
     def call_chatgpt(e):
-        print('よばれた')
         global chatgpt_flag
         message = question.value
         question.value = ''
@@ -156,7 +154,4 @@ def init():
     finish_disp_progress_flag = False
 
 def start():
-    try:
-        ft.app(target=main)
-    except Exception as e:
-        print(e)
+    ft.app(target=main)
