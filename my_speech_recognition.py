@@ -55,7 +55,7 @@ def text_2_wav(text, log, speaker_id=8, max_retry=20, filename='audio.wav'):
     # 音声合成データの作成して、wavファイルに保存
     synth_payload = {'speaker': speaker_id}
     for _ in range(max_retry):
-        response = requests.post(VOICEVOX_ADDRESS + 'synthesis', params=synth_payload, data=json.dumps(query_data), timeout=3)
+        response = requests.post(VOICEVOX_ADDRESS + 'synthesis', params=synth_payload, data=json.dumps(query_data), timeout=60)
         if response.status_code == 200:
             with open(filename, 'wb') as fp:
                 fp.write(response.content)

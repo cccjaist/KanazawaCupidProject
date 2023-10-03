@@ -7,3 +7,6 @@ class Status(Enum):
 
 class Character(Enum):
     ZUNDAMON = 'zundamon'
+
+class Prompt(Enum):
+    NORMAL = 'normal'
