@@ -153,5 +153,5 @@ def init():
     start_disp_progress_flag = False
     finish_disp_progress_flag = False
 
-def start(log):
+def start():
     ft.app(target=main)
