@@ -19,8 +19,6 @@ def init(my_prompt):
     global PROMPT
     with open(PROMPT_PATH + my_prompt.name + '.txt', encoding='utf-8') as f:
         PROMPT = f.read()
-    
-    print(PROMPT)
 
 # chatGPTにメッセージを送り、その返答を受信する
 def get_response(message, log):

@@ -64,7 +64,6 @@ def check_send_message(executor):
         if (app.chatgpt_flag):
             app.chatgpt_flag = False
             send_message = get_message()
-            print(send_message)
         if (my_sr.chatgpt_flag):
             my_sr.chatgpt_flag = False
             send_message = get_message()
