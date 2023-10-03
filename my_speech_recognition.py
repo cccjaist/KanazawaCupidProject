@@ -41,12 +41,11 @@ def recognize(audio, log):
 
 # TODO: spkaker_id用の設定ファイル作る
 def text_2_wav(text, log, speaker_id=8, max_retry=20, filename='audio.wav'):
+
     # 音声合成のための、クエリを作成
     query_payload = {'text': text, 'speaker': speaker_id}
-    for query_i in range(max_retry):
-        response = requests.post(VOICEVOX_ADDRESS + 'audio_query',
-                                 params=query_payload,
-                                 timeout=10)
+    for _ in range(max_retry):
+        response = requests.post(VOICEVOX_ADDRESS + 'audio_query', params=query_payload, timeout=30)
         if response.status_code == 200:
             query_data = response.json()
             break
@@ -55,11 +54,8 @@ def text_2_wav(text, log, speaker_id=8, max_retry=20, filename='audio.wav'):
 
     # 音声合成データの作成して、wavファイルに保存
     synth_payload = {'speaker': speaker_id}
-    for synth_i in range(max_retry):
-        response = requests.post(VOICEVOX_ADDRESS + 'synthesis',
-                                 params=synth_payload,
-                                 data=json.dumps(query_data),
-                                 timeout=100)
+    for _ in range(max_retry):
+        response = requests.post(VOICEVOX_ADDRESS + 'synthesis', params=synth_payload, data=json.dumps(query_data), timeout=3)
         if response.status_code == 200:
             with open(filename, 'wb') as fp:
                 fp.write(response.content)
@@ -68,7 +64,7 @@ def text_2_wav(text, log, speaker_id=8, max_retry=20, filename='audio.wav'):
         log.write_error_log('リトライ回数が上限に到達しました。')
 
 def play_auido_by_filename(filename: str):
-    # 保存したwavファイルを、再生
+    # 保存したwavファイルを再生する
     print('playing…')
     wav_obj = simpleaudio.WaveObject.from_wave_file(filename)
     play_obj = wav_obj.play()
