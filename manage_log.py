@@ -1,4 +1,5 @@
 MESSAGE_LOG_PATH = 'logs/message_logs/'
+RESPONSE_LOG_PATH = 'logs/response_logs/'
 ERROR_LOG_PATH = 'logs/error_logs/'
 
 import os
@@ -7,6 +8,7 @@ import datetime
 
 global message_file_name
 global tmp_message_file_name
+global response_file_name
 error_file_name = ''
 
 message_logzero = logzero
@@ -16,10 +18,13 @@ error_logzero = logzero
 def init():
     global message_file_name
     global tmp_message_file_name
+    global response_file_name
     global error_file_name
+
     now = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M')
     message_file_name = 'message_' + now + '.log'
     tmp_message_file_name = 'message_' + now + '_tmp.log'
+    response_file_name = 'response_' + now + '.log'
     error_file_name = 'error_' + now + '.log'
 
     log_format = '%(message)s'
@@ -37,6 +42,13 @@ def write_message_log(log):
     if log == '':
         return
     message_logzero.logfile(get_tmp_file_name(), encoding='utf-8')
+    message_logzero.logger.debug(log)
+
+# chatGPTからの返答をログに追加する
+def write_response_log(log):
+    if log == '':
+        return
+    message_logzero.logfile(RESPONSE_LOG_PATH + response_file_name, encoding='utf-8')
     message_logzero.logger.debug(log)
 
 # tmpファイルの会話内容をリセットしlogに統合する

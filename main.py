@@ -59,52 +59,58 @@ def check_send_message(executor):
         if (app.service_stop_flag):
             log.delete_tmp_file()
             break
-        
-        # print('----------')
-        # print(app.chatgpt_flag)
-        # print(my_sr.chatgpt_flag)
 
         # chatGPTを呼び出すフラグが立ったら呼び出しを行う
         if (app.chatgpt_flag):
-            print('hogehoge')
             app.chatgpt_flag = False
             send_message = get_message()
             print(send_message)
-        elif (my_sr.chatgpt_flag):
+        if (my_sr.chatgpt_flag):
             my_sr.chatgpt_flag = False
             send_message = get_message()
 
         # chatGPTの返答待ちの場合は送信処理を行わない
         if send_message != '' and app.my_status != app_status.Status.THINK:
             print('送信処理開始')
+
             app.start_disp_progress_flag = True
             app.my_status = app_status.Status.THINK
 
-            # chatGPTからの返答を取得し、それを音声出力する  
-            response = chatgpt.get_response(send_message)
-            executor.submit(speak_message, response)
+            # chatGPTからの返答を取得し、それを音声出力する
+            response = chatgpt.get_response(send_message, log)
+            # タイムアウトなどでエラーが発生した際は、エラーメッセージを送信する
+            if (response == ''):
+                executor.submit(speak_error_message)
+            else:
+                executor.submit(speak_message, response)
             
             # tmpファイルの会話内容をlogに統合する
             log.attach_message_log()
 
 # chatGPTからの返答を音声出力する
 def speak_message(message):
-    print('res')
-    print(message)
-
-    # アプリのステータスをSPEAKにする
-    app.my_status = app_status.Status.SPEAK
 
     # 音声データのファイル名
     filename = 'audio.wav'
     try:
         my_sr.text_2_wav(message, log, filename=filename)
+        # アプリのステータスをSPEAKにする
+        app.my_status = app_status.Status.SPEAK
         my_sr.play_auido_by_filename(filename)
         app.my_status = app_status.Status.NORMAL
         app.finish_disp_progress_flag = False
     except Exception as e:
-        print(e)
-    
+        log.write_error_log(e)
+        speak_error_message()
+
+# エラーメッセージを音声出力する
+def speak_error_message():
+    filename = 'error_message.wav'
+
+    # アプリのステータスをSPEAKにする
+    app.my_status = app_status.Status.SPEAK
+    my_sr.play_auido_by_filename(filename)
+    app.my_status = app_status.Status.NORMAL
 
 if __name__ == '__main__':
     main()

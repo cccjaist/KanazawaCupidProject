@@ -2,11 +2,10 @@ OPENAI_API_KEY = 'OPENAI_API_KEY'
 OPENAI_ORGANIZATION = 'OPENAI_ORGANIZATION'
 CHATGPT_MODEL = 'gpt-3.5-turbo'
 
-QUESTION_TEMPLATE = ('以下の2人の会話内容を聞いて、200字以内で返答してください。\n')
+QUESTION_TEMPLATE = ('以下の会話内容を聞き、200字以内で適切な返答をしてください。\n')
 
 import os
 import openai
-import manage_log as log
 from dotenv import load_dotenv
 
 def init():
@@ -16,24 +15,30 @@ def init():
     openai.organization = os.environ[OPENAI_ORGANIZATION]
 
 # chatGPTにメッセージを送り、その返答を受信する
-def get_response(message):
+def get_response(message, log):
 
-    # TODO: 本番ではここのreturnを消去する
-    # return 'ほげほげ'
+    ans = ''
 
-    res = openai.ChatCompletion.create(
-        model = CHATGPT_MODEL,
-        messages = [
-            {
-                'role': 'system',
-                'content': 'あなたは異なる立場の2人の仲を取り持つ仲人です。'
-            },
-            {
-                'role': 'user',
-                'content': QUESTION_TEMPLATE + message
-            }
-        ]
-    )
+    try:
+        response = openai.ChatCompletion.create(
+            model = CHATGPT_MODEL,
+            timeout=30,
+            request_timeout = 60,
+            messages = [
+                {
+                    'role': 'system',
+                    'content': 'あなたは異なる立場の2人の仲を取り持つ仲人です。'
+                },
+                {
+                    'role': 'user',
+                    'content': QUESTION_TEMPLATE + message
+                }
+            ]
+        )
+        ans = response['choices'][0]['message']['content']
+        log.write_response_log(ans)
 
-    ans = res['choices'][0]['message']['content']
+    except Exception as e:
+        log.write_error_log(e)
+    
     return ans
