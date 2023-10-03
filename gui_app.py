@@ -8,6 +8,7 @@ global character
 global my_status
 global service_stop_flag
 global service_progress
+global audio_input_flag
 
 global start_disp_progress_flag
 global finish_disp_progress_flag
@@ -19,6 +20,7 @@ max_image_num = {}
 now_image_num = 0
 
 async def main(page: ft.Page):
+    global audio_input_flag
 
     # 表情が0.6秒ごとにコマ送りで変化する
     async def change_image():
@@ -86,6 +88,11 @@ async def main(page: ft.Page):
         fit=ft.ImageFit.CONTAIN,
     )
 
+    # 音声入力を受け入れるフラグを切り替える
+    def change_audio_input_flag(e):
+        global audio_input_flag
+        audio_input_flag = not audio_input_flag
+
     # ページの基本構成の設定
     page.title = "金沢キューピッド"
     page.theme_mode = ft.ThemeMode.LIGHT
@@ -94,6 +101,7 @@ async def main(page: ft.Page):
     question = ft.TextField(label="会話内容")
     add_button = ft.ElevatedButton("会話を追加", on_click=add_message)
     send_button = ft.ElevatedButton("君はどう思う？", on_click=call_chatgpt)
+    audio_input_switch = ft.Switch(label="音声入力", value=audio_input_flag, on_change=change_audio_input_flag)
     progress_bar = ft.ProgressBar(width=400, color="amber", bgcolor="#eeeeee")
     
     # サービスを終了するためのコンポーネント
@@ -114,7 +122,7 @@ async def main(page: ft.Page):
         content=ft.Text("サービスを終了しました。×を押してアプリを終了してください。"),
     )
 
-    await page.add_async(img, question, ft.Row([add_button, send_button, finish_button]))
+    await page.add_async(img, question, audio_input_switch, ft.Row([add_button, send_button, finish_button]))
 
     # ステータスに応じた標準差分を設定する
     await change_image()
@@ -145,6 +153,11 @@ def init():
     # 初期値はFalse
     global service_stop_flag
     service_stop_flag = False
+
+    # 音声入力を受け付けるためのフラグ
+    # 初期値はFalse
+    global audio_input_flag
+    audio_input_flag = True
 
     # プログレスバーを表示するフラグをセットする
     # 初期値はFalse

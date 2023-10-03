@@ -41,7 +41,8 @@ def monitor_voice(executor):
         if (app.service_stop_flag):
             break
         # 音声をテキスト情報に変換する処理を呼び出す
-        my_sr.speech_recognize(executor, log)
+        if (app.audio_input_flag):
+            my_sr.speech_recognize(executor, log)
 
 # chatgptに送信するメッセージ内容を取得する
 def get_message():
