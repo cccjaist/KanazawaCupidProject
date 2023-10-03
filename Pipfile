@@ -1,0 +1,30 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+speechrecognition = "*"
+pyaudio = "*"
+requests = "*"
+simpleaudio = "*"
+openai = "*"
+python-dotenv = "*"
+flet = "*"
+datetime = "*"
+logzero = "*"
+
+[dev-packages]
+speechrecognition = "*"
+pyaudio = "*"
+requests = "*"
+simpleaudio = "*"
+openai = "*"
+python-dotenv = "*"
+flet = "*"
+datetime = "*"
+logzero = "*"
+
+[scripts]
+start = "pipenv run python ./main.py"
+test = "pipenv run python ./test.py"
