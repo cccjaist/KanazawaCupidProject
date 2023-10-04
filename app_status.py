@@ -9,4 +9,7 @@ class Character(Enum):
     ZUNDAMON = 'zundamon'
 
 class Prompt(Enum):
-    NORMAL = 'normal'
+    ZUNDAMON = 'zundamon'
+    DORAEMON = 'doraemon'
+    SHAROL = 'sharol'
+    SHIMA = 'shima'
