@@ -82,6 +82,18 @@ pipenv run start
 
 <img width="397" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/4e23c94f-e563-433e-a3af-eb392a8d90db">
 
+#### プロンプトの変更方法
+
+`main.py`の`init`メソッド内にある`chatgpt_init()`(30行目)の()の中身を書き換えることで、プロンプトを変更することができる。</br>
+プロンプトの一覧を以下に示す。
+
+|プロンプト名称|initの中身|補足|
+|-|-|-|
+|ドラえもん|app_status.Prompt.DORAEMON|デフォルトで呼び出されている|
+|シャロル|app_status.Prompt.SHAROL||
+|シマ|app_status.Prompt.SHIMA||
+|ずんだもん|app_status.Prompt.ZUNDAMON|ファシリテーターとしての最低限の設定のみ|
+
 #### 入力方法
 
 マイクに向かって話しかけるか、「会話内容」にテキストを打ち込んで「会話を追加」ボタンを押すことで、入力が行える。</br>
