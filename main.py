@@ -27,7 +27,7 @@ def init():
     app.character = app_status.Character.ZUNDAMON
     log.init()
     my_sr.init()
-    chatgpt.init(app_status.Prompt.NORMAL)
+    chatgpt.init(app_status.Prompt.DORAEMON)
     app.init()
 
 # サービスの開始
