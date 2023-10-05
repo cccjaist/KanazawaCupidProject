@@ -81,7 +81,6 @@ OPENAI_ORGANIZATION={chatGPTのOrganization Key}
 
 <img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/e896dab8-4f42-4fe7-acd9-d24b08460f29">
 
-
 ### 起動方法
 
 1. VOICE VOXを起動しておく。
@@ -94,11 +93,42 @@ OPENAI_ORGANIZATION={chatGPTのOrganization Key}
 pipenv run start
 ```
 
-### アプリの使い方
+## インストールに失敗した場合
+
+通常よりパソコンの容量を多く利用してしまうが、以下のコマンドを入力するもう1つのインストール方法を紹介する。
+
+[一度インストールしたことがある人向け](https://github.com/cccjaist/KanazawaCupidProject#%E4%B8%80%E5%BA%A6%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%97%E3%81%9F%E3%81%93%E3%81%A8%E3%81%8C%E3%81%82%E3%82%8B%E4%BA%BA%E5%90%91%E3%81%91)の2の方法と同じ方法で、コマンドプロンプトを開き、ダウンロードしたファイルがある階層に移動する。<br/>
+そして以下のコマンドを入力する。
+
+```
+pip install SpeechRecognition
+pip install PyAudio
+pip install requests
+pip install simpleaudio
+pip install openai
+pip install python-dotenv
+pip install flet
+pip install datetime
+pip install logzero
+```
+
+### 起動方法
+
+1. VOICE VOXを起動しておく。
+
+2. [一度インストールしたことがある人向け](https://github.com/cccjaist/KanazawaCupidProject#%E4%B8%80%E5%BA%A6%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%97%E3%81%9F%E3%81%93%E3%81%A8%E3%81%8C%E3%81%82%E3%82%8B%E4%BA%BA%E5%90%91%E3%81%91)の2の方法と同じ方法で、コマンドプロンプトを開き、ダウンロードしたファイルがある階層に移動する。
+
+3. 2で開いたコマンドプロンプトに、以下のコマンドを入力する。
+
+```
+python main.py
+```
+
+## アプリの使い方
 
 <img width="397" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/4e23c94f-e563-433e-a3af-eb392a8d90db">
 
-#### プロンプトの変更方法
+### プロンプトの変更方法
 
 `main.py`の`init`メソッド内にある`chatgpt_init()`(30行目)の()の中身を書き換えることで、プロンプトを変更することができる。</br>
 プロンプトの一覧を以下に示す。
