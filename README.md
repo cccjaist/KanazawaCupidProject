@@ -1,4 +1,10 @@
-# KanazawaCupidProject
+# 金沢キューピッドアプリ
+
+## 必要スペック
+
+- ストレージ容量(必須) ： 20GB程度(Visual Studioで10GB, VOICE VOXが10GB程度)
+- RAM : 3GB以上
+- グラフィック(推奨) : 2GB以上のVRAMを搭載するNVIDIA GPU
 
 ## 初めてインストールする人向け
 
@@ -20,17 +26,21 @@ pip install pipenv
 
 <img width="650" alt="vs2022-installer-workloads" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/07c36018-34b6-4b84-b098-b42ea87dc644">
 
-4. VOICE VOXをインストールする([リンク](https://voicevox.hiroshiba.jp/)
+4. VOICE VOXをインストールする([リンク](https://voicevox.hiroshiba.jp/))
 
 ## 一度インストールしたことがある人向け
 
 1. GitHubの「<>Code」ボタン、「Download ZIP」ボタンを順にクリックしてプログラムを自分のフォルダにダウンロードする。<br/>
-	 ダウンロードしたら、zipファイルを解凍して、「KanazawaCupidProject-main」フォルダを開く。
+ダウンロードしたら、zipファイルを解凍して、「KanazawaCupidProject-main」フォルダを開く。<br/>
+以前「KanazawaCupidProject-main」をダウンロードしたことがある人は、以前のフォルダを消しても構わない。
 
 <img width="300" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/1b183ab9-5b86-42f0-b4eb-3f7b2130b426">
 
 2. コマンドプロンプトを開き、ダウンロードしたファイルがある階層に移動する。方法は2つあるので、好きな方を選ぶこと。<br/>
 1つ目は、「KanazawaCupidProject-main」フォルダで右クリックし、「ターミナルを開く」をクリックする方法である。
+
+**注意：zipファイルでインストール・解凍すると、「KanazawaCupidProject-main」フォルダの中に同じ名前のフォルダ「KanazawaCupidProject-main」フォルダが入っている場合がある。** <br/>
+**main.pyが入っているフォルダの方が、正しいフォルダである。誤ったフォルダで操作しないよう注意すること。**
 
 <img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/8136c4ec-6977-4312-95d6-1696a3b12d06">
 
