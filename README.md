@@ -58,6 +58,12 @@ cd {ここにさっきコピーしたパスを張り付ける}
 
 <img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/453b1969-c32a-49be-8b51-0ac429c6cbb3">
 
+それが終わったら、ターミナルに以下のコマンドを入力する。
+
+```
+pipenv install
+```
+
 
 3. ダウンロードしたファイルの中に`.env`という名前のファイルを作成する。
 
