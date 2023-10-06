@@ -13,3 +13,4 @@ class Prompt(Enum):
     DORAEMON = 'doraemon'
     SHAROL = 'sharol'
     SHIMA = 'shima'
+    KENNICHI ='kennichi'

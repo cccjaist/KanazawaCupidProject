@@ -3,7 +3,7 @@ OPENAI_ORGANIZATION = 'OPENAI_ORGANIZATION'
 CHATGPT_MODEL = 'gpt-3.5-turbo'
 
 PROMPT_PATH = 'prompt/'
-QUESTION_TEMPLATE = ('以下の会話内容を聞き、200字以内で適切な返答をしてください。\n')
+QUESTION_TEMPLATE = ('以下は、2人の会話内容です。あなたはファシリテーターとして、200字以内で適切な返答をしてください。\n')
 global PROMPT
 
 import os
