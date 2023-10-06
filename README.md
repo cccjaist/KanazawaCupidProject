@@ -138,6 +138,7 @@ python main.py
 |ドラえもん|app_status.Prompt.DORAEMON|デフォルトで呼び出されている|
 |シャロル|app_status.Prompt.SHAROL||
 |シマ|app_status.Prompt.SHIMA||
+|大前研一|app_status.Prompt.KENNICHI||
 |ずんだもん|app_status.Prompt.ZUNDAMON|ファシリテーターとしての最低限の設定のみ|
 
 #### 入力方法
