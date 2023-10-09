@@ -14,3 +14,11 @@ class Prompt(Enum):
     SHAROL = 'sharol'
     SHIMA = 'shima'
     KENNICHI ='kennichi'
+
+# TODO: あとで整合性合わせる
+class DisplayName(Enum):
+    ZUNDAMON = 'ずんだもん'
+    DORAEMON = 'ねこえもん'
+    SHAROL = 'シャロル'
+    SHIMA = 'シマ'
+    KENNICHI ='こうしろ じょうじ'
