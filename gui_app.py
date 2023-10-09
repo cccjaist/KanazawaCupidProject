@@ -3,6 +3,7 @@ import os
 import time
 import manage_log as log
 import flet as ft
+import connect_chatgpt as gpt
 
 global character
 global my_status
@@ -18,6 +19,14 @@ global chatgpt_flag
 
 max_image_num = {}
 now_image_num = 0
+
+display_name = {
+    'ZUNDAMON': 'ずんだもん',
+    'DORAEMON': 'ねこえもん',
+    'SHAROL': 'シャロル',
+    'SHIMA': 'シマ',
+    'KENNICHI': 'こうしろ じょうじ'
+}
 
 async def main(page: ft.Page):
     global audio_input_flag
@@ -84,7 +93,7 @@ async def main(page: ft.Page):
     img = ft.Image(
         src = img_path,
         width=300,
-        height=300,
+        height=500,
         fit=ft.ImageFit.CONTAIN,
     )
 
@@ -98,6 +107,7 @@ async def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
     page.padding = 50
     await page.update_async()
+    input_text = ft.Text(display_name[gpt.PROMPT_NAME], size=30)
     question = ft.TextField(label="会話内容")
     add_button = ft.ElevatedButton("会話を追加", on_click=add_message)
     send_button = ft.ElevatedButton("君はどう思う？", on_click=call_chatgpt)
@@ -122,7 +132,8 @@ async def main(page: ft.Page):
         content=ft.Text("サービスを終了しました。×を押してアプリを終了してください。"),
     )
 
-    await page.add_async(img, question, audio_input_switch, ft.Row([add_button, send_button, finish_button]))
+    # await page.add_async(ft.Row([question, audio_input_switch,add_button, send_button, finish_button]), img)
+    await page.add_async(ft.Row([img, ft.Column([input_text, question, audio_input_switch,add_button, send_button, finish_button])]))
 
     # ステータスに応じた標準差分を設定する
     await change_image()
