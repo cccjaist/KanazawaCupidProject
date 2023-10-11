@@ -5,7 +5,6 @@ CHATGPT_MODEL = 'gpt-3.5-turbo'
 PROMPT_PATH = 'prompt/'
 QUESTION_TEMPLATE = ('以下は、2人の会話内容です。あなたはファシリテーターとして、200字以内で適切な返答をしてください。\n')
 global PROMPT
-global PROMPT_NAME
 
 import os
 import openai
@@ -18,9 +17,7 @@ def init(my_prompt):
     openai.organization = os.environ[OPENAI_ORGANIZATION]
 
     global PROMPT
-    global PROMPT_NAME
-    PROMPT_NAME = my_prompt.name
-    with open(PROMPT_PATH + my_prompt.name + '.ini', encoding='utf-8') as f:
+    with open(PROMPT_PATH + my_prompt + '.ini', encoding='utf-8') as f:
         PROMPT = f.read()
 
 # chatGPTにメッセージを送り、その返答を受信する

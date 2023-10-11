@@ -12,23 +12,23 @@ def main():
 
         # 音声入力を監視する処理とアプリからの入力を監視する処理
         # マルチスレッドで呼び出す
-        executor = ThreadPoolExecutor(max_workers=100)
-        executor.submit(check_send_message, executor)
-        executor.submit(monitor_voice, executor)
+        # executor = ThreadPoolExecutor(max_workers=100)
+        # executor.submit(check_send_message, executor)
+        # executor.submit(monitor_voice, executor)
 
-        # サービスの開始
-        start()
+        # # サービスの開始
+        # start()
     except Exception as e:
         log.write_error_log(e)
 
 # 各ライブラリ・変数の初期化
 def init():
+    character = app_status.Character.NEKOEMON.name
     app.my_status = app_status.Status.NORMAL
-    app.character = app_status.Character.ZUNDAMON
     log.init()
     my_sr.init()
-    chatgpt.init(app_status.Prompt.DORAEMON)
-    app.init()
+    chatgpt.init(character)
+    app.init(character)
 
 # サービスの開始
 def start():

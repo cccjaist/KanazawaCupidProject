@@ -6,27 +6,16 @@ import flet as ft
 import connect_chatgpt as gpt
 
 global character
+global display_name
 global my_status
 global service_stop_flag
-global service_progress
 global audio_input_flag
-
-global start_disp_progress_flag
-global finish_disp_progress_flag
 
 # main.pyでchatgptを呼び出すための設定
 global chatgpt_flag
 
 max_image_num = {}
 now_image_num = 0
-
-display_name = {
-    'ZUNDAMON': 'ずんだもん',
-    'DORAEMON': 'ねこえもん',
-    'SHAROL': 'シャロル',
-    'SHIMA': 'シマ',
-    'KENNICHI': 'こうしろ じょうじ'
-}
 
 async def main(page: ft.Page):
     global audio_input_flag
@@ -39,16 +28,7 @@ async def main(page: ft.Page):
             img.src = img_path
             await page.update_async()
             time.sleep(0.6)
-    
-    async def control_progress_bar():
-        global my_status
-        while not service_stop_flag:
-            if start_disp_progress_flag:
-                page.add(progress_bar)
-                start_disp_progress_flag = False
-            if finish_disp_progress_flag:
-                page.remove(progress_bar)
-                finish_disp_progress_flag = False            
+       
 
     # 会話内容をログに追加する
     async def add_message(e):
@@ -107,12 +87,11 @@ async def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
     page.padding = 50
     await page.update_async()
-    input_text = ft.Text(display_name[gpt.PROMPT_NAME], size=30)
+    input_text = ft.Text(display_name, size=30)
     question = ft.TextField(label="会話内容")
     add_button = ft.ElevatedButton("会話を追加", on_click=add_message)
     send_button = ft.ElevatedButton("君はどう思う？", on_click=call_chatgpt)
     audio_input_switch = ft.Switch(label="音声入力", value=audio_input_flag, on_change=change_audio_input_flag)
-    progress_bar = ft.ProgressBar(width=400, color="amber", bgcolor="#eeeeee")
     
     # サービスを終了するためのコンポーネント
     finish_button = ft.ElevatedButton("会話を終了する", on_click=open_finish_dialog)
@@ -137,22 +116,28 @@ async def main(page: ft.Page):
 
     # ステータスに応じた標準差分を設定する
     await change_image()
-    # プログレスバーを表示する
-    # await control_progress_bar()
     
 def get_image(now_image_num):
     now_image_num += 1
     if now_image_num >= max_image_num[my_status.value]:
         now_image_num = 0
     
-    img_path = f'img/{character.value}/{my_status.value}/{character.value}_{my_status.value}_{now_image_num}.png'
+    img_path = f'img/{character}/{my_status.value}/{character.value}_{my_status.value}_{now_image_num}.png'
     return img_path, now_image_num
 
-def init():
+def init(character_tmp):
+    # アプリのキャラクターを設定する
+    global character
+    character = app_status.Character[character_tmp].value
+
+    # アプリのディスプレイ名を設定する
+    global display_name
+    display_name = app_status.DisplayName[character_tmp].value
+
     # 各statusのフォルダの中にあるimageの数を取得してmax_image_numに格納する
     # 例: max_image_num = {'normal':2, 'speak':3, 'think':2}
     for status in app_status.Status:
-        path = f'img/{character.value}/{status.value}'
+        path = f'img/{character}/{status.value}'
         image_num =  sum(os.path.isfile(os.path.join(path,name)) for name in os.listdir(path))
         max_image_num[status.value] = image_num
 
@@ -170,12 +155,6 @@ def init():
     global audio_input_flag
     audio_input_flag = True
 
-    # プログレスバーを表示するフラグをセットする
-    # 初期値はFalse
-    global start_disp_progress_flag
-    global finish_disp_progress_flag
-    start_disp_progress_flag = False
-    finish_disp_progress_flag = False
 
 def start():
     ft.app(target=main)

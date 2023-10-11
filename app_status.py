@@ -7,18 +7,13 @@ class Status(Enum):
 
 class Character(Enum):
     ZUNDAMON = 'zundamon'
-
-class Prompt(Enum):
-    ZUNDAMON = 'zundamon'
-    DORAEMON = 'doraemon'
+    NEKOEMON = 'nekoemon'
     SHAROL = 'sharol'
     SHIMA = 'shima'
-    KENNICHI ='kennichi'
-
-# TODO: あとで整合性合わせる
+    GEORGE ='george'
 class DisplayName(Enum):
     ZUNDAMON = 'ずんだもん'
-    DORAEMON = 'ねこえもん'
+    NEKOEMON = 'ねこえもん'
     SHAROL = 'シャロル'
     SHIMA = 'シマ'
-    KENNICHI ='こうしろ じょうじ'
+    GEORGE ='こうしろ じょうじ'
