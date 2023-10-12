@@ -36,7 +36,6 @@ def choose_character():
 
         try:
             my_character = character_list[int(character_num)].name
-            print(my_character)
             return my_character
         except Exception as e:
             print('your input is invalid. Try again.')
