@@ -70,7 +70,6 @@ def check_send_message(executor):
         if send_message != '' and app.my_status != app_status.Status.THINK:
             print('送信処理開始')
 
-            app.start_disp_progress_flag = True
             app.my_status = app_status.Status.THINK
 
             # chatGPTからの返答を取得し、それを音声出力する
@@ -95,7 +94,6 @@ def speak_message(message):
         app.my_status = app_status.Status.SPEAK
         my_sr.play_auido_by_filename(filename)
         app.my_status = app_status.Status.NORMAL
-        app.finish_disp_progress_flag = False
     except Exception as e:
         log.write_error_log(e)
         speak_error_message()
