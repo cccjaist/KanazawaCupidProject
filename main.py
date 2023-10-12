@@ -81,7 +81,7 @@ def check_send_message(executor):
 
         # chatGPTを呼び出すフラグが立ったら呼び出しを行う
         if (app.chatgpt_status != app_status.ChatGPTStatus.NONE):
-            app.chatgpt_status = app_status.ChatGPTStatus.NONE
+            # app.chatgpt_status = app_status.ChatGPTStatus.NONE
             send_message = get_message()
 
         # chatGPTの返答待ちの場合は送信処理を行わない
@@ -91,7 +91,7 @@ def check_send_message(executor):
             app.my_status = app_status.Status.THINK
 
             # chatGPTからの返答を取得し、それを音声出力する
-            response = chatgpt.get_response(send_message, log)
+            response = chatgpt.get_response(send_message, app.chatgpt_status, log)
             # タイムアウトなどでエラーが発生した際は、エラーメッセージを送信する
             if (response == ''):
                 executor.submit(speak_error_message)
@@ -115,6 +115,8 @@ def speak_message(message):
     except Exception as e:
         log.write_error_log(e)
         speak_error_message()
+    
+    app.chatgpt_status = app_status.ChatGPTStatus.NONE
 
 # エラーメッセージを音声出力する
 def speak_error_message():
