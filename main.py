@@ -42,10 +42,9 @@ def choose_character():
 
 # 各ライブラリ・変数の初期化
 def init(character):
-    # character = app_status.Character.NEKOEMON.name
     app.my_status = app_status.Status.NORMAL
     log.init()
-    my_sr.init()
+    my_sr.init(app_status.Speaker[character].value)
     chatgpt.init(character)
     app.init(character)
 
