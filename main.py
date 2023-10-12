@@ -6,9 +6,12 @@ import gui_app as app
 import manage_log as log
 
 def main():
-    try: 
+    try:
+        # 利用したいキャラクターを選択する
+        my_character = choose_character()
+
         # サービスに必要な情報を初期化
-        init()
+        init(app_status.Character[my_character].name)
 
         # 音声入力を監視する処理とアプリからの入力を監視する処理
         # マルチスレッドで呼び出す
@@ -21,9 +24,26 @@ def main():
     except Exception as e:
         log.write_error_log(e)
 
+# 使用するキャラクターを選択する
+def choose_character():
+    print('----------------------------')
+    print('You can use these characters.')
+    character_list = list(app_status.DisplayName)
+    while True:
+        for i in range(len(character_list)):
+            print(i, ':', character_list[i].value)
+        character_num = input('Input the character number>>')
+
+        try:
+            my_character = character_list[int(character_num)].name
+            print(my_character)
+            return my_character
+        except Exception as e:
+            print('your input is invalid. Try again.')
+
 # 各ライブラリ・変数の初期化
-def init():
-    character = app_status.Character.NEKOEMON.name
+def init(character):
+    # character = app_status.Character.NEKOEMON.name
     app.my_status = app_status.Status.NORMAL
     log.init()
     my_sr.init()
