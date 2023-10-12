@@ -4,6 +4,7 @@ CHATGPT_MODEL = 'gpt-3.5-turbo'
 
 PROMPT_PATH = 'prompt/'
 QUESTION_TEMPLATE = ('以下は、2人の会話内容です。あなたはファシリテーターとして、200字以内で適切な返答をしてください。\n')
+OBJECTION_TEMPLATE = ('以下は、2人の会話内容です。あなたは200字以内で反論を返答してください。')
 global PROMPT
 
 import os

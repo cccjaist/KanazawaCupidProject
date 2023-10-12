@@ -2,13 +2,14 @@ import json
 import requests
 import simpleaudio
 import speech_recognition as sr
+import app_status
 
 VOICEVOX_ADDRESS = 'http://127.0.0.1:50021/'
 CALLING_CHATGPT_MESSAGE = ['君はどう思う', '君はどうおもう', 'きみはどう思う', 'きみはどうおもう']
 
 global recognizer
 # main.pyでchatgptを呼び出すための処理
-global chatgpt_flag
+global chatgpt_status
 
 # 会話の音声を聞いて変換処理に受け渡す処理
 def speech_recognize(executor, log):
@@ -30,8 +31,8 @@ def recognize(audio, log):
         # もし会話内容に呼び出しコマンドが含まれていた場合は、chatGPTの呼び出しフラグをONにする
         for calling_catgpt_message in CALLING_CHATGPT_MESSAGE:
             if calling_catgpt_message in text:
-                global chatgpt_flag
-                chatgpt_flag = True
+                global chatgpt_status
+                chatgpt_status = app_status.ChatGPTStatus.TALK
                 break
     except sr.UnknownValueError:
         pass
@@ -72,6 +73,6 @@ def play_auido_by_filename(filename: str):
 
 def init():
     global recognizer
-    global chatgpt_flag
+    global chatgpt_status
     recognizer = sr.Recognizer()
-    chatgpt_flag = False
+    chatgpt_status = app_status.ChatGPTStatus.NONE

@@ -62,11 +62,11 @@ def check_send_message(executor):
             break
 
         # chatGPTを呼び出すフラグが立ったら呼び出しを行う
-        if (app.chatgpt_flag):
-            app.chatgpt_flag = False
+        if (app.chatgpt_status != app_status.ChatGPTStatus.NONE):
+            app.chatgpt_status = False
             send_message = get_message()
-        if (my_sr.chatgpt_flag):
-            my_sr.chatgpt_flag = False
+        if (my_sr.chatgpt_status):
+            my_sr.chatgpt_status = False
             send_message = get_message()
 
         # chatGPTの返答待ちの場合は送信処理を行わない
