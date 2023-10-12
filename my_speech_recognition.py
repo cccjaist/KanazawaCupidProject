@@ -7,8 +7,10 @@ VOICEVOX_ADDRESS = 'http://127.0.0.1:50021/'
 CALLING_CHATGPT_MESSAGE = ['君はどう思う', '君はどうおもう', 'きみはどう思う', 'きみはどうおもう']
 
 global recognizer
-# main.pyでchatgptを呼び出すための処理
+# main.pyでchatgptを呼び出すためのフラグ
 global chatgpt_flag
+# 話者の声を設定する変数
+global speaker
 
 # 会話の音声を聞いて変換処理に受け渡す処理
 def speech_recognize(executor, log):
@@ -39,11 +41,11 @@ def recognize(audio, log):
     except sr.RequestError as e:
         log.write_error_log('GoogleWeb Speech APIに音声認識を要求できませんでした。')
 
-# TODO: spkaker_id用の設定ファイル作る
-def text_2_wav(text, log, speaker_id=3, max_retry=20, filename='audio.wav'):
+def text_2_wav(text, log, max_retry=20, filename='audio.wav'):
+    global speaker
 
     # 音声合成のための、クエリを作成
-    query_payload = {'text': text, 'speaker': speaker_id}
+    query_payload = {'text': text, 'speaker': speaker}
     for _ in range(max_retry):
         response = requests.post(VOICEVOX_ADDRESS + 'audio_query', params=query_payload, timeout=30)
         if response.status_code == 200:
@@ -53,7 +55,7 @@ def text_2_wav(text, log, speaker_id=3, max_retry=20, filename='audio.wav'):
         log.write_error_log('リトライ回数が上限に到達しました。')
 
     # 音声合成データの作成して、wavファイルに保存
-    synth_payload = {'speaker': speaker_id}
+    synth_payload = {'speaker': speaker}
     for _ in range(max_retry):
         response = requests.post(VOICEVOX_ADDRESS + 'synthesis', params=synth_payload, data=json.dumps(query_data), timeout=60)
         if response.status_code == 200:
@@ -70,8 +72,10 @@ def play_auido_by_filename(filename: str):
     play_obj = wav_obj.play()
     play_obj.wait_done()
 
-def init():
+def init(speaker_id):
     global recognizer
     global chatgpt_flag
+    global speaker
     recognizer = sr.Recognizer()
     chatgpt_flag = False
+    speaker = speaker_id
