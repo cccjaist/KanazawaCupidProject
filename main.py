@@ -12,12 +12,12 @@ def main():
 
         # 音声入力を監視する処理とアプリからの入力を監視する処理
         # マルチスレッドで呼び出す
-        # executor = ThreadPoolExecutor(max_workers=100)
-        # executor.submit(check_send_message, executor)
-        # executor.submit(monitor_voice, executor)
+        executor = ThreadPoolExecutor(max_workers=100)
+        executor.submit(check_send_message, executor)
+        executor.submit(monitor_voice, executor)
 
-        # # サービスの開始
-        # start()
+        # サービスの開始
+        start()
     except Exception as e:
         log.write_error_log(e)
 
