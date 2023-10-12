@@ -129,7 +129,7 @@ def get_image(now_image_num):
     if now_image_num >= max_image_num[my_status.value]:
         now_image_num = 0
     
-    img_path = f'img/{character}/{my_status.value}/{character.value}_{my_status.value}_{now_image_num}.png'
+    img_path = f'img/{character}/{my_status.value}/{character}_{my_status.value}_{now_image_num}.png'
     return img_path, now_image_num
 
 def init(character_tmp):
