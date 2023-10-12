@@ -41,11 +41,11 @@ def recognize(audio, log):
     except sr.RequestError as e:
         log.write_error_log('GoogleWeb Speech APIに音声認識を要求できませんでした。')
 
-# TODO: spkaker_id用の設定ファイル作る
-def text_2_wav(text, log, speaker_id=speaker, max_retry=20, filename='audio.wav'):
+def text_2_wav(text, log, max_retry=20, filename='audio.wav'):
+    global speaker
 
     # 音声合成のための、クエリを作成
-    query_payload = {'text': text, 'speaker': speaker_id}
+    query_payload = {'text': text, 'speaker': speaker}
     for _ in range(max_retry):
         response = requests.post(VOICEVOX_ADDRESS + 'audio_query', params=query_payload, timeout=30)
         if response.status_code == 200:
@@ -55,7 +55,7 @@ def text_2_wav(text, log, speaker_id=speaker, max_retry=20, filename='audio.wav'
         log.write_error_log('リトライ回数が上限に到達しました。')
 
     # 音声合成データの作成して、wavファイルに保存
-    synth_payload = {'speaker': speaker_id}
+    synth_payload = {'speaker': speaker}
     for _ in range(max_retry):
         response = requests.post(VOICEVOX_ADDRESS + 'synthesis', params=synth_payload, data=json.dumps(query_data), timeout=60)
         if response.status_code == 200:
