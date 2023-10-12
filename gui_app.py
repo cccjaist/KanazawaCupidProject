@@ -12,7 +12,7 @@ global service_stop_flag
 global audio_input_flag
 
 # main.pyでchatgptを呼び出すための設定
-global chatgpt_flag
+global chatgpt_status
 
 max_image_num = {}
 now_image_num = 0
@@ -37,13 +37,19 @@ async def main(page: ft.Page):
         log.write_message_log(message)
     
     # 会話内容をログに追加してchatgptにメッセージを送信する
-    def call_chatgpt(e):
-        global chatgpt_flag
+    def call_talk_chatgpt(e):
+        global chatgpt_status
         message = question.value
         question.value = ''
         log.write_message_log(message)
-
-        chatgpt_flag = True
+        chatgpt_status = app_status.ChatGPTStatus.TALK
+    
+    def call_objection_chatgpt(e):
+        global chatgpt_status
+        message = question.value
+        question.value = ''
+        log.write_message_log(message)
+        chatgpt_status = app_status.ChatGPTStatus.OBJECTION
     
     # 終了確認のダイアログが開く
     async def open_finish_dialog(e):
@@ -90,7 +96,8 @@ async def main(page: ft.Page):
     input_text = ft.Text(display_name, size=30)
     question = ft.TextField(label="会話内容")
     add_button = ft.ElevatedButton("会話を追加", on_click=add_message)
-    send_button = ft.ElevatedButton("君はどう思う？", on_click=call_chatgpt)
+    send_talk_button = ft.ElevatedButton("君はどう思う？", on_click=call_talk_chatgpt)
+    send_objection_button = ft.ElevatedButton("反論して！", on_click=call_objection_chatgpt)
     audio_input_switch = ft.Switch(label="音声入力", value=audio_input_flag, on_change=change_audio_input_flag)
     
     # サービスを終了するためのコンポーネント
@@ -112,7 +119,7 @@ async def main(page: ft.Page):
     )
 
     # await page.add_async(ft.Row([question, audio_input_switch,add_button, send_button, finish_button]), img)
-    await page.add_async(ft.Row([img, ft.Column([input_text, question, audio_input_switch,add_button, send_button, finish_button])]))
+    await page.add_async(ft.Row([img, ft.Column([input_text, question, audio_input_switch, add_button, send_talk_button,send_objection_button, finish_button])]))
 
     # ステータスに応じた標準差分を設定する
     await change_image()
@@ -142,8 +149,8 @@ def init(character_tmp):
         max_image_num[status.value] = image_num
 
     # chatgptを呼び出すための設定を初期化する
-    global chatgpt_flag
-    chatgpt_flag = False
+    global chatgpt_status
+    chatgpt_status = app_status.ChatGPTStatus.NONE
 
     # サービスを終了させるためのフラグをセットする
     # 初期値はFalse

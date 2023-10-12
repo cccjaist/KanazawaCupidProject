@@ -80,22 +80,18 @@ def check_send_message(executor):
             break
 
         # chatGPTを呼び出すフラグが立ったら呼び出しを行う
-        if (app.chatgpt_flag):
-            app.chatgpt_flag = False
-            send_message = get_message()
-        if (my_sr.chatgpt_flag):
-            my_sr.chatgpt_flag = False
+        if (app.chatgpt_status != app_status.ChatGPTStatus.NONE):
+            # app.chatgpt_status = app_status.ChatGPTStatus.NONE
             send_message = get_message()
 
         # chatGPTの返答待ちの場合は送信処理を行わない
         if send_message != '' and app.my_status != app_status.Status.THINK:
             print('送信処理開始')
 
-            app.start_disp_progress_flag = True
             app.my_status = app_status.Status.THINK
 
             # chatGPTからの返答を取得し、それを音声出力する
-            response = chatgpt.get_response(send_message, log)
+            response = chatgpt.get_response(send_message, app.chatgpt_status, log)
             # タイムアウトなどでエラーが発生した際は、エラーメッセージを送信する
             if (response == ''):
                 executor.submit(speak_error_message)
@@ -116,10 +112,11 @@ def speak_message(message):
         app.my_status = app_status.Status.SPEAK
         my_sr.play_auido_by_filename(filename)
         app.my_status = app_status.Status.NORMAL
-        app.finish_disp_progress_flag = False
     except Exception as e:
         log.write_error_log(e)
         speak_error_message()
+    
+    app.chatgpt_status = app_status.ChatGPTStatus.NONE
 
 # エラーメッセージを音声出力する
 def speak_error_message():

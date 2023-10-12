@@ -2,12 +2,12 @@ import json
 import requests
 import simpleaudio
 import speech_recognition as sr
+import app_status
 
 VOICEVOX_ADDRESS = 'http://127.0.0.1:50021/'
-CALLING_CHATGPT_MESSAGE = ['君はどう思う', '君はどうおもう', 'きみはどう思う', 'きみはどうおもう']
 
 global recognizer
-# main.pyでchatgptを呼び出すためのフラグ
+# main.pyでchatgptを呼び出すための処理
 global chatgpt_flag
 # 話者の声を設定する変数
 global speaker
@@ -29,12 +29,6 @@ def recognize(audio, log):
         # Google Web Speech APIで音声認識を行い、その結果をログに書く
         text = recognizer.recognize_google(audio, language='ja-JP')
         log.write_message_log(text)
-        # もし会話内容に呼び出しコマンドが含まれていた場合は、chatGPTの呼び出しフラグをONにする
-        for calling_catgpt_message in CALLING_CHATGPT_MESSAGE:
-            if calling_catgpt_message in text:
-                global chatgpt_flag
-                chatgpt_flag = True
-                break
     except sr.UnknownValueError:
         pass
         # log.write_error_log('Google Web Speech APIは音声を認識できませんでした。')

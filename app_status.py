@@ -5,6 +5,11 @@ class Status(Enum):
     THINK = 'think'
     SPEAK = 'speak'
 
+class ChatGPTStatus(Enum):
+    NONE = 0
+    TALK = 1
+    OBJECTION = 2
+
 class Character(Enum):
     ZUNDAMON = 'zundamon'
     NEKOEMON = 'nekoemon'
