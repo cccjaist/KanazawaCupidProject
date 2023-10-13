@@ -115,7 +115,8 @@ async def main(page: ft.Page):
     question_field = ft.TextField(label="会話内容", width=250, border_color=ft.colors.BLUE_100)
     add_button = ft.ElevatedButton("会話を追加する", on_click=add_message, width=170)
     send_talk_button = ft.ElevatedButton("君はどう思う？", on_click=call_talk_chatgpt, width=170)
-    send_objection_button = ft.ElevatedButton("反論して！", on_click=call_objection_chatgpt, width=170)
+    # send_objection_button = ft.ElevatedButton("反論して！", on_click=call_objection_chatgpt, width=170)
+    send_objection_button = ft.ElevatedButton("君はどう思う？", on_click=call_objection_chatgpt, width=170)
     audio_input_switch = ft.Switch(label="音声入力", value=audio_input_flag, on_change=change_audio_input_flag)
     
     # chatgpt返信用の画面
@@ -141,7 +142,8 @@ async def main(page: ft.Page):
     )
 
     # 画面構成
-    button_area = ft.Column([display_name_text, question_field, audio_input_switch, add_button, send_talk_button,send_objection_button, finish_button])
+    # button_area = ft.Column([display_name_text, question_field, audio_input_switch, add_button, send_talk_button,send_objection_button, finish_button])
+    button_area = ft.Column([display_name_text, question_field, audio_input_switch, add_button, send_objection_button, finish_button])
     under_area  = ft.Row([img, button_area])
     main_area = ft.Column([response_area, under_area])
     await page.add_async(main_area)
