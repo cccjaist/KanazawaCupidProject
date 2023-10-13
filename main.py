@@ -99,11 +99,10 @@ def check_send_message(executor):
 
         # chatGPTを呼び出すフラグが立ったら呼び出しを行う
         if (app.chatgpt_status != app_status.ChatGPTStatus.NONE):
-            # app.chatgpt_status = app_status.ChatGPTStatus.NONE
             send_message = get_message()
 
         # chatGPTの返答待ちの場合は送信処理を行わない
-        if send_message != '' and app.my_status != app_status.Status.THINK:
+        if send_message != '' and app.my_status == app_status.Status.NORMAL:
             print('送信処理開始')
 
             app.my_status = app_status.Status.THINK
