@@ -18,14 +18,16 @@ def main():
         # 音声入力を監視する処理とアプリからの入力を監視する処理
         # マルチスレッドで呼び出す
         executor = ThreadPoolExecutor(max_workers=100)
-        executor.submit(output_facilitation_message)
+        # これを入れると他の動作が重くなるのでコメントアウト
+        # TODO: 後で直す
+        # executor.submit(output_facilitation_message)
         executor.submit(check_send_message, executor)
         executor.submit(monitor_voice, executor)
 
         # サービスの開始
         start()
     except Exception as e:
-        log.write_error_log(e)
+        log.write_error_log(e, 1)
 
 # 使用するキャラクターを選択する
 def choose_character():
@@ -98,11 +100,11 @@ def check_send_message(executor):
             break
 
         # chatGPTを呼び出すフラグが立ったら呼び出しを行う
-        if (app.chatgpt_status != app_status.ChatGPTStatus.NONE):
+        if app.chatgpt_status != app_status.ChatGPTStatus.NONE and app.my_status == app_status.Status.NORMAL:
             send_message = get_message()
 
         # chatGPTの返答待ちの場合は送信処理を行わない
-        if send_message != '' and app.my_status == app_status.Status.NORMAL:
+        if send_message != '':
             print('送信処理開始')
 
             app.my_status = app_status.Status.THINK
@@ -130,11 +132,13 @@ def speak_message(message):
         app.my_status = app_status.Status.SPEAK
         my_sr.play_auido_by_filename(filename)
         app.my_status = app_status.Status.NORMAL
+        app.chatgpt_status = app_status.ChatGPTStatus.NONE
     except Exception as e:
-        log.write_error_log(e)
+        log.write_error_log(e,2)
         speak_error_message()
     
-    app.chatgpt_status = app_status.ChatGPTStatus.NONE
+        app.chatgpt_status = app_status.ChatGPTStatus.NONE
+        app.my_status = app_status.Status.NORMAL
 
 # エラーメッセージを音声出力する
 def speak_error_message():
