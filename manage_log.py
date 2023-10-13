@@ -32,8 +32,8 @@ def init():
     message_logzero.formatter(formatter)
 
 # エラー情報をログに追加する
-def write_error_log(log):
-    print(log)
+def write_error_log(log, num=-1):
+    print(num, log)
     error_logzero.logfile(ERROR_LOG_PATH + error_file_name, encoding='utf-8')
     error_logzero.logger.debug(log)
 

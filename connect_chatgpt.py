@@ -43,14 +43,17 @@ def get_response(message, status, log):
                 },
                 {
                     'role': 'user',
-                    'content': QUESTION_TEMPLATE[status] + message
+                    'content': QUESTION_TEMPLATE[status.OBJECTION] + message
                 }
             ]
         )
         ans = response['choices'][0]['message']['content']
         log.write_response_log(ans)
+    
+        if ans == 'ERROR: Terminate response.':
+            ans = '質問が悪かったようです。もう一度、分かりやすく質問してくれますか。'
 
     except Exception as e:
-        log.write_error_log(e)
+        log.write_error_log(e, 3)
     
     return ans
