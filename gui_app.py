@@ -111,7 +111,7 @@ async def main(page: ft.Page):
     
     # chatgpt返信用の画面
     response_field = ft.TextField(label="返信文")
-    response_area = ft.Column([response_field], auto_scroll=True, height=50, bgcolor=ft.colors.BLACK)
+    response_area = ft.Column([response_field], auto_scroll=True, height=50)
 
     # サービスを終了するためのコンポーネント
     finish_button = ft.ElevatedButton("会話を終了する", on_click=open_finish_dialog)

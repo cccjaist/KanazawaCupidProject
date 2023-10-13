@@ -4,6 +4,8 @@ import connect_chatgpt as chatgpt
 import app_status
 import gui_app as app
 import manage_log as log
+import time
+import random
 
 def main():
     try:
@@ -16,6 +18,7 @@ def main():
         # 音声入力を監視する処理とアプリからの入力を監視する処理
         # マルチスレッドで呼び出す
         executor = ThreadPoolExecutor(max_workers=100)
+        executor.submit(output_facilitation_message)
         executor.submit(check_send_message, executor)
         executor.submit(monitor_voice, executor)
 
@@ -51,6 +54,21 @@ def init(character):
 # サービスの開始
 def start():
     app.start()
+
+# 定期時間ごとにメッセージを出力する
+def output_facilitation_message():
+    while True:
+        # アプリでservice_stop_flagが動作したらサービスが終了する
+        # 420秒間は待機
+        for i in range(420):
+            if (app.service_stop_flag):
+                return
+            time.sleep(1)
+        # 420秒経過したら通知音を鳴らし、メッセージ一覧の中からランダムでメッセージを出す
+        message = app_status.facilitation_message
+        app.chatgpt_response = message[random.randint(0, len(message) - 1)]
+        print(app.chatgpt_response)
+        my_sr.play_auido_by_filename('sound/notification.wav')
 
 # 音声入力を継続的に監視する処理を呼び出す
 def monitor_voice(executor):
@@ -121,7 +139,7 @@ def speak_message(message):
 
 # エラーメッセージを音声出力する
 def speak_error_message():
-    filename = 'error_message.wav'
+    filename = 'sound/error_message.wav'
 
     # アプリのステータスをSPEAKにする
     app.my_status = app_status.Status.SPEAK
