@@ -1,4 +1,10 @@
-# KanazawaCupidProject
+# 金沢キューピッドアプリ
+
+## 必要スペック
+
+- ストレージ容量(必須) ： 20GB程度(Visual Studioで10GB, VOICE VOXが10GB程度)
+- RAM : 3GB以上
+- グラフィック(推奨) : 2GB以上のVRAMを搭載するNVIDIA GPU
 
 ## 初めてインストールする人向け
 
@@ -20,17 +26,21 @@ pip install pipenv
 
 <img width="650" alt="vs2022-installer-workloads" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/07c36018-34b6-4b84-b098-b42ea87dc644">
 
-4. VOICE VOXをインストールする([リンク](https://voicevox.hiroshiba.jp/)
+4. VOICE VOXをインストールする([リンク](https://voicevox.hiroshiba.jp/))
 
 ## 一度インストールしたことがある人向け
 
 1. GitHubの「<>Code」ボタン、「Download ZIP」ボタンを順にクリックしてプログラムを自分のフォルダにダウンロードする。<br/>
-	 ダウンロードしたら、zipファイルを解凍して、「KanazawaCupidProject-main」フォルダを開く。
+ダウンロードしたら、zipファイルを解凍して、「KanazawaCupidProject-main」フォルダを開く。<br/>
+以前「KanazawaCupidProject-main」をダウンロードしたことがある人は、以前のフォルダを消しても構わない。
 
 <img width="300" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/1b183ab9-5b86-42f0-b4eb-3f7b2130b426">
 
 2. コマンドプロンプトを開き、ダウンロードしたファイルがある階層に移動する。方法は2つあるので、好きな方を選ぶこと。<br/>
 1つ目は、「KanazawaCupidProject-main」フォルダで右クリックし、「ターミナルを開く」をクリックする方法である。
+
+**注意：zipファイルでインストール・解凍すると、「KanazawaCupidProject-main」フォルダの中に同じ名前のフォルダ「KanazawaCupidProject-main」フォルダが入っている場合がある。** <br/>
+**main.pyが入っているフォルダの方が、正しいフォルダである。誤ったフォルダで操作しないよう注意すること。**
 
 <img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/8136c4ec-6977-4312-95d6-1696a3b12d06">
 
@@ -47,6 +57,12 @@ cd {ここにさっきコピーしたパスを張り付ける}
 ```
 
 <img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/453b1969-c32a-49be-8b51-0ac429c6cbb3">
+
+それが終わったら、ターミナルに以下のコマンドを入力する。
+
+```
+pipenv install
+```
 
 
 3. ダウンロードしたファイルの中に`.env`という名前のファイルを作成用意する。用意する方法は2種類ある。
@@ -80,7 +96,6 @@ OPENAI_ORGANIZATION={chatGPTのOrganization Key}
 
 <img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/e896dab8-4f42-4fe7-acd9-d24b08460f29">
 
-
 ### 起動方法
 
 1. VOICE VOXを起動しておく。
@@ -93,10 +108,40 @@ OPENAI_ORGANIZATION={chatGPTのOrganization Key}
 pipenv run start
 ```
 
-### アプリの使い方
+## インストールに失敗した場合
+
+通常よりパソコンの容量を多く利用してしまうが、以下のコマンドを入力するもう1つのインストール方法を紹介する。
+
+[一度インストールしたことがある人向け](https://github.com/cccjaist/KanazawaCupidProject#%E4%B8%80%E5%BA%A6%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%97%E3%81%9F%E3%81%93%E3%81%A8%E3%81%8C%E3%81%82%E3%82%8B%E4%BA%BA%E5%90%91%E3%81%91)の2の方法と同じ方法で、コマンドプロンプトを開き、ダウンロードしたファイルがある階層に移動する。<br/>
+そして以下のコマンドを入力する。
+
+```
+pip install SpeechRecognition
+pip install PyAudio
+pip install requests
+pip install simpleaudio
+pip install openai
+pip install python-dotenv
+pip install flet
+pip install datetime
+pip install logzero
+```
+
+### 起動方法
+
+1. VOICE VOXを起動しておく。
+
+2. [一度インストールしたことがある人向け](https://github.com/cccjaist/KanazawaCupidProject#%E4%B8%80%E5%BA%A6%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%97%E3%81%9F%E3%81%93%E3%81%A8%E3%81%8C%E3%81%82%E3%82%8B%E4%BA%BA%E5%90%91%E3%81%91)の2の方法と同じ方法で、コマンドプロンプトを開き、ダウンロードしたファイルがある階層に移動する。
+
+3. 2で開いたコマンドプロンプトに、以下のコマンドを入力する。
+
+```
+python main.py
+```
+
+## アプリの使い方
 
 <img width="437" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/43b5ad1a-d5c8-4444-81ea-b687b56be042">
-
 
 #### 起動時：プロンプトの決定
 
