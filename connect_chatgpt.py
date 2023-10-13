@@ -5,13 +5,13 @@ from app_status import ChatGPTStatus as status
 
 OPENAI_API_KEY = 'OPENAI_API_KEY'
 OPENAI_ORGANIZATION = 'OPENAI_ORGANIZATION'
-CHATGPT_MODEL = 'gpt-3.5-turbo'
+CHATGPT_MODEL = 'gpt-4'
 
 PROMPT_PATH = 'prompt/'
 
 QUESTION_TEMPLATE = {
     status.TALK : ('以下は、2人の会話内容です。あなたはファシリテーターとして、200字以内で適切な返答をしてください。\n'),
-    status.OBJECTION : ('以下は、2人の会話内容です。あなたは200字以内で反論を返答してください。')
+    status.OBJECTION : ('以下の文章に対して、200字以内で反論してください。')
 }
 
 global PROMPT
