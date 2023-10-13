@@ -35,6 +35,10 @@ async def main(page: ft.Page):
             # チャットの返信を表示する
             response_field.value = chatgpt_response
 
+            # 送信ボタンを押せるかどうかのチェック
+            send_talk_button.disabled = is_state_normal()
+            send_objection_button.disabled = is_state_normal()
+
             await page.update_async()
             time.sleep(0.6)
 
@@ -95,6 +99,11 @@ async def main(page: ft.Page):
     def change_audio_input_flag(e):
         global audio_input_flag
         audio_input_flag = not audio_input_flag
+
+    # normal状態の時以外は送信ボタンを押せないようにしている
+    def is_state_normal():
+        global my_status
+        return my_status != app_status.Status.NORMAL
 
     # ページの基本構成の設定
     page.title = "金沢キューピッド"
