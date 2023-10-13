@@ -90,8 +90,7 @@ async def main(page: ft.Page):
     img_path, now_image_num = get_image(now_image_num)
     img = ft.Image(
         src = img_path,
-        # width=150,
-        height=500,
+        height=400,
         fit=ft.ImageFit.CONTAIN,
     )
 
@@ -108,22 +107,23 @@ async def main(page: ft.Page):
     # ページの基本構成の設定
     page.title = "金沢キューピッド"
     page.theme_mode = ft.ThemeMode.LIGHT
-    page.padding = 10
-    page.window_width = 500
+    page.padding = 20
+    page.window_width = 600
+    page.window_height = 600
     await page.update_async()
-    display_name_text = ft.Text(display_name, size=30)
-    question_field = ft.TextField(label="会話内容")
-    add_button = ft.ElevatedButton("会話を追加する", on_click=add_message)
-    send_talk_button = ft.ElevatedButton("君はどう思う？", on_click=call_talk_chatgpt)
-    send_objection_button = ft.ElevatedButton("　反論して！　", on_click=call_objection_chatgpt)
+    display_name_text = ft.Text(display_name, size=30, color=ft.colors.BLUE_400)
+    question_field = ft.TextField(label="会話内容", width=250, border_color=ft.colors.BLUE_100)
+    add_button = ft.ElevatedButton("会話を追加する", on_click=add_message, width=170)
+    send_talk_button = ft.ElevatedButton("君はどう思う？", on_click=call_talk_chatgpt, width=170)
+    send_objection_button = ft.ElevatedButton("反論して！", on_click=call_objection_chatgpt, width=170)
     audio_input_switch = ft.Switch(label="音声入力", value=audio_input_flag, on_change=change_audio_input_flag)
     
     # chatgpt返信用の画面
-    response_field = ft.TextField(label="返信文")
+    response_field = ft.TextField(label="ここに返信が届くよ！", border=ft.InputBorder.NONE)
     response_area = ft.Column([response_field], auto_scroll=True, height=50)
 
     # サービスを終了するためのコンポーネント
-    finish_button = ft.ElevatedButton("会話を終了する", on_click=open_finish_dialog)
+    finish_button = ft.ElevatedButton("会話を終了する", on_click=open_finish_dialog, width=170)
     finish_confilm_dialog = ft.AlertDialog(
         modal=True,
         title=ft.Text("金沢キューピッド"),
@@ -187,7 +187,7 @@ def init(character_tmp):
     global audio_input_flag
     audio_input_flag = True
 
-    # chatgpt空の返答文をセットする
+    # chatgpt空の返信文をセットする
     # 初期値は空文字
     global chatgpt_response
     chatgpt_response = ""
