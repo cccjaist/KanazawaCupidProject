@@ -96,6 +96,7 @@ def check_send_message(executor):
             if (response == ''):
                 executor.submit(speak_error_message)
             else:
+                app.chatgpt_response = response
                 executor.submit(speak_message, response)
             
             # tmpファイルの会話内容をlogに統合する
