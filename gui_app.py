@@ -6,64 +6,62 @@ import flet as ft
 import connect_chatgpt as gpt
 
 global character
+global display_name
 global my_status
 global service_stop_flag
-global service_progress
 global audio_input_flag
 
-global start_disp_progress_flag
-global finish_disp_progress_flag
-
 # main.pyでchatgptを呼び出すための設定
-global chatgpt_flag
+global chatgpt_status
+# chatgptからのレスポンスを表示する
+global chatgpt_response
 
 max_image_num = {}
 now_image_num = 0
 
-display_name = {
-    'ZUNDAMON': 'ずんだもん',
-    'DORAEMON': 'ねこえもん',
-    'SHAROL': 'シャロル',
-    'SHIMA': 'シマ',
-    'KENNICHI': 'こうしろ じょうじ'
-}
-
 async def main(page: ft.Page):
     global audio_input_flag
 
-    # 表情が0.6秒ごとにコマ送りで変化する
-    async def change_image():
+    # 0.6秒おきに行われる定期実行
+    async def regular_exection():
         global now_image_num
+        global chatgpt_response
+
         while not service_stop_flag:
+            # 表情がコマ送りで変化する
             img_path, now_image_num = get_image(now_image_num)
             img.src = img_path
+
+            # チャットの返信を表示する
+            response_field.value = chatgpt_response
+
+            # 送信ボタンを押せるかどうかのチェック
+            send_talk_button.disabled = is_state_normal()
+            send_objection_button.disabled = is_state_normal()
+
             await page.update_async()
             time.sleep(0.6)
-    
-    async def control_progress_bar():
-        global my_status
-        while not service_stop_flag:
-            if start_disp_progress_flag:
-                page.add(progress_bar)
-                start_disp_progress_flag = False
-            if finish_disp_progress_flag:
-                page.remove(progress_bar)
-                finish_disp_progress_flag = False            
 
     # 会話内容をログに追加する
     async def add_message(e):
-        message = question.value
-        question.value = ''
+        message = question_field.value
+        question_field.value = ''
         log.write_message_log(message)
     
     # 会話内容をログに追加してchatgptにメッセージを送信する
-    def call_chatgpt(e):
-        global chatgpt_flag
-        message = question.value
-        question.value = ''
+    def call_talk_chatgpt(e):
+        global chatgpt_status
+        message = question_field.value
+        question_field.value = ''
         log.write_message_log(message)
-
-        chatgpt_flag = True
+        chatgpt_status = app_status.ChatGPTStatus.TALK
+    
+    def call_objection_chatgpt(e):
+        global chatgpt_status
+        message = question_field.value
+        question_field.value = ''
+        log.write_message_log(message)
+        chatgpt_status = app_status.ChatGPTStatus.OBJECTION
     
     # 終了確認のダイアログが開く
     async def open_finish_dialog(e):
@@ -92,8 +90,7 @@ async def main(page: ft.Page):
     img_path, now_image_num = get_image(now_image_num)
     img = ft.Image(
         src = img_path,
-        width=300,
-        height=500,
+        height=400,
         fit=ft.ImageFit.CONTAIN,
     )
 
@@ -102,20 +99,31 @@ async def main(page: ft.Page):
         global audio_input_flag
         audio_input_flag = not audio_input_flag
 
+    # normal状態の時以外は送信ボタンを押せないようにしている
+    def is_state_normal():
+        global my_status
+        return my_status != app_status.Status.NORMAL
+
     # ページの基本構成の設定
     page.title = "金沢キューピッド"
     page.theme_mode = ft.ThemeMode.LIGHT
-    page.padding = 50
+    page.padding = 20
+    page.window_width = 600
+    page.window_height = 600
     await page.update_async()
-    input_text = ft.Text(display_name[gpt.PROMPT_NAME], size=30)
-    question = ft.TextField(label="会話内容")
-    add_button = ft.ElevatedButton("会話を追加", on_click=add_message)
-    send_button = ft.ElevatedButton("君はどう思う？", on_click=call_chatgpt)
+    display_name_text = ft.Text(display_name, size=30, color=ft.colors.BLUE_400)
+    question_field = ft.TextField(label="会話内容", width=250, border_color=ft.colors.BLUE_100)
+    add_button = ft.ElevatedButton("会話を追加する", on_click=add_message, width=170)
+    send_talk_button = ft.ElevatedButton("君はどう思う？", on_click=call_talk_chatgpt, width=170)
+    send_objection_button = ft.ElevatedButton("反論して！", on_click=call_objection_chatgpt, width=170)
     audio_input_switch = ft.Switch(label="音声入力", value=audio_input_flag, on_change=change_audio_input_flag)
-    progress_bar = ft.ProgressBar(width=400, color="amber", bgcolor="#eeeeee")
     
+    # chatgpt返信用の画面
+    response_field = ft.TextField(label="ここに返信が届くよ！", border=ft.InputBorder.NONE)
+    response_area = ft.Column([response_field], auto_scroll=True, height=50)
+
     # サービスを終了するためのコンポーネント
-    finish_button = ft.ElevatedButton("会話を終了する", on_click=open_finish_dialog)
+    finish_button = ft.ElevatedButton("会話を終了する", on_click=open_finish_dialog, width=170)
     finish_confilm_dialog = ft.AlertDialog(
         modal=True,
         title=ft.Text("金沢キューピッド"),
@@ -132,33 +140,42 @@ async def main(page: ft.Page):
         content=ft.Text("サービスを終了しました。×を押してアプリを終了してください。"),
     )
 
-    # await page.add_async(ft.Row([question, audio_input_switch,add_button, send_button, finish_button]), img)
-    await page.add_async(ft.Row([img, ft.Column([input_text, question, audio_input_switch,add_button, send_button, finish_button])]))
+    # 画面構成
+    button_area = ft.Column([display_name_text, question_field, audio_input_switch, add_button, send_talk_button,send_objection_button, finish_button])
+    under_area  = ft.Row([img, button_area])
+    main_area = ft.Column([response_area, under_area])
+    await page.add_async(main_area)
 
     # ステータスに応じた標準差分を設定する
-    await change_image()
-    # プログレスバーを表示する
-    # await control_progress_bar()
+    await regular_exection()
     
 def get_image(now_image_num):
     now_image_num += 1
     if now_image_num >= max_image_num[my_status.value]:
         now_image_num = 0
     
-    img_path = f'img/{character.value}/{my_status.value}/{character.value}_{my_status.value}_{now_image_num}.png'
+    img_path = f'img/{character}/{my_status.value}/{character}_{my_status.value}_{now_image_num}.png'
     return img_path, now_image_num
 
-def init():
+def init(character_tmp):
+    # アプリのキャラクターを設定する
+    global character
+    character = app_status.Character[character_tmp].value
+
+    # アプリのディスプレイ名を設定する
+    global display_name
+    display_name = app_status.DisplayName[character_tmp].value
+
     # 各statusのフォルダの中にあるimageの数を取得してmax_image_numに格納する
     # 例: max_image_num = {'normal':2, 'speak':3, 'think':2}
     for status in app_status.Status:
-        path = f'img/{character.value}/{status.value}'
+        path = f'img/{character}/{status.value}'
         image_num =  sum(os.path.isfile(os.path.join(path,name)) for name in os.listdir(path))
         max_image_num[status.value] = image_num
 
     # chatgptを呼び出すための設定を初期化する
-    global chatgpt_flag
-    chatgpt_flag = False
+    global chatgpt_status
+    chatgpt_status = app_status.ChatGPTStatus.NONE
 
     # サービスを終了させるためのフラグをセットする
     # 初期値はFalse
@@ -170,12 +187,10 @@ def init():
     global audio_input_flag
     audio_input_flag = True
 
-    # プログレスバーを表示するフラグをセットする
-    # 初期値はFalse
-    global start_disp_progress_flag
-    global finish_disp_progress_flag
-    start_disp_progress_flag = False
-    finish_disp_progress_flag = False
+    # chatgpt空の返信文をセットする
+    # 初期値は空文字
+    global chatgpt_response
+    chatgpt_response = ""
 
 def start():
     ft.app(target=main)

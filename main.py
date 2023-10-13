@@ -4,15 +4,21 @@ import connect_chatgpt as chatgpt
 import app_status
 import gui_app as app
 import manage_log as log
+import time
+import random
 
 def main():
-    try: 
+    try:
+        # 利用したいキャラクターを選択する
+        my_character = choose_character()
+
         # サービスに必要な情報を初期化
-        init()
+        init(app_status.Character[my_character].name)
 
         # 音声入力を監視する処理とアプリからの入力を監視する処理
         # マルチスレッドで呼び出す
         executor = ThreadPoolExecutor(max_workers=100)
+        executor.submit(output_facilitation_message)
         executor.submit(check_send_message, executor)
         executor.submit(monitor_voice, executor)
 
@@ -21,18 +27,48 @@ def main():
     except Exception as e:
         log.write_error_log(e)
 
+# 使用するキャラクターを選択する
+def choose_character():
+    print('----------------------------')
+    print('You can use these characters.')
+    character_list = list(app_status.DisplayName)
+    while True:
+        for i in range(len(character_list)):
+            print(i, ':', character_list[i].value)
+        character_num = input('Input the character number>>')
+
+        try:
+            my_character = character_list[int(character_num)].name
+            return my_character
+        except Exception as e:
+            print('your input is invalid. Try again.')
+
 # 各ライブラリ・変数の初期化
-def init():
+def init(character):
     app.my_status = app_status.Status.NORMAL
-    app.character = app_status.Character.ZUNDAMON
     log.init()
-    my_sr.init()
-    chatgpt.init(app_status.Prompt.DORAEMON)
-    app.init()
+    my_sr.init(app_status.Speaker[character].value)
+    chatgpt.init(character)
+    app.init(character)
 
 # サービスの開始
 def start():
     app.start()
+
+# 定期時間ごとにメッセージを出力する
+def output_facilitation_message():
+    while True:
+        # アプリでservice_stop_flagが動作したらサービスが終了する
+        # 420秒間は待機
+        for i in range(420):
+            if (app.service_stop_flag):
+                return
+            time.sleep(1)
+        # 420秒経過したら通知音を鳴らし、メッセージ一覧の中からランダムでメッセージを出す
+        message = app_status.facilitation_message
+        app.chatgpt_response = message[random.randint(0, len(message) - 1)]
+        print(app.chatgpt_response)
+        my_sr.play_auido_by_filename('sound/notification.wav')
 
 # 音声入力を継続的に監視する処理を呼び出す
 def monitor_voice(executor):
@@ -62,26 +98,22 @@ def check_send_message(executor):
             break
 
         # chatGPTを呼び出すフラグが立ったら呼び出しを行う
-        if (app.chatgpt_flag):
-            app.chatgpt_flag = False
-            send_message = get_message()
-        if (my_sr.chatgpt_flag):
-            my_sr.chatgpt_flag = False
+        if (app.chatgpt_status != app_status.ChatGPTStatus.NONE):
             send_message = get_message()
 
         # chatGPTの返答待ちの場合は送信処理を行わない
-        if send_message != '' and app.my_status != app_status.Status.THINK:
+        if send_message != '' and app.my_status == app_status.Status.NORMAL:
             print('送信処理開始')
 
-            app.start_disp_progress_flag = True
             app.my_status = app_status.Status.THINK
 
             # chatGPTからの返答を取得し、それを音声出力する
-            response = chatgpt.get_response(send_message, log)
+            response = chatgpt.get_response(send_message, app.chatgpt_status, log)
             # タイムアウトなどでエラーが発生した際は、エラーメッセージを送信する
             if (response == ''):
                 executor.submit(speak_error_message)
             else:
+                app.chatgpt_response = response
                 executor.submit(speak_message, response)
             
             # tmpファイルの会話内容をlogに統合する
@@ -98,14 +130,15 @@ def speak_message(message):
         app.my_status = app_status.Status.SPEAK
         my_sr.play_auido_by_filename(filename)
         app.my_status = app_status.Status.NORMAL
-        app.finish_disp_progress_flag = False
     except Exception as e:
         log.write_error_log(e)
         speak_error_message()
+    
+    app.chatgpt_status = app_status.ChatGPTStatus.NONE
 
 # エラーメッセージを音声出力する
 def speak_error_message():
-    filename = 'error_message.wav'
+    filename = 'sound/error_message.wav'
 
     # アプリのステータスをSPEAKにする
     app.my_status = app_status.Status.SPEAK
