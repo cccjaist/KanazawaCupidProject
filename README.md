@@ -49,14 +49,29 @@ cd {ここにさっきコピーしたパスを張り付ける}
 <img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/453b1969-c32a-49be-8b51-0ac429c6cbb3">
 
 
-3. ダウンロードしたファイルの中に`.env`という名前のファイルを作成する。
+3. ダウンロードしたファイルの中に`.env`という名前のファイルを作成用意する。用意する方法は2種類ある。
+
+### サークルメンバー向け
+
+[Googleドライブのリンク](https://drive.google.com/file/d/1kGPLj9V1mLSZLxXrRYHga9ZhQUWcnlMS/view?usp=sharing)にアクセスして、ダウンロードする。<br/>
+**注意：ダウンロードするとき、なぜかファイル名が「.env」から「env」に勝手に書き換わってしまうことがある！必ず「.env」という名前で保存すること。**
+
+<img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/300e1327-38b0-4a47-bf08-a159be84d555">
+
+<img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/1f8a2eb5-125e-4e19-a9e8-6fc02a143129">
+
+ダウンロードした「.env」ファイルを、「KanazawaCupidProject-main」へ移動させる。
+
+<img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/7cbfb820-7fbd-4598-aff6-2cf26a6df4b7">
+
+### サークル以外のメンバー
 
 <img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/bf250f4e-39ad-4749-9381-e6fec3235616">
 
 <img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/e2dacd60-edf5-43fd-8877-5d937f143ec0">
 
 4. 3で作った`.env`の中身を、以下の内容にして保存する。但し{}の中身は調べて書き換えること。
-	 ChatGPTのAPI Keyは、公式ページから生成可能([リンク](https://platform.openai.com/account/api-keys))。サークルメンバーは@makabi_bmkに聞いて下さい。
+	 ChatGPTのAPI Keyは、公式ページから生成可能([リンク](https://platform.openai.com/account/api-keys))。
 
 ```
 OPENAI_API_KEY={chatGPTのAPIKey}
