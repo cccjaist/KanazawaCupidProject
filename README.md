@@ -51,7 +51,7 @@ cd {ここにさっきコピーしたパスを張り付ける}
 
 3. ダウンロードしたファイルの中に`.env`という名前のファイルを作成用意する。用意する方法は2種類ある。
 
-### サークルメンバー向け
+**3.1 サークルメンバー向け**
 
 [Googleドライブのリンク](https://drive.google.com/file/d/1kGPLj9V1mLSZLxXrRYHga9ZhQUWcnlMS/view?usp=sharing)にアクセスして、ダウンロードする。<br/>
 **注意：ダウンロードするとき、なぜかファイル名が「.env」から「env」に勝手に書き換わってしまうことがある！必ず「.env」という名前で保存すること。**
@@ -60,11 +60,11 @@ cd {ここにさっきコピーしたパスを張り付ける}
 
 <img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/1f8a2eb5-125e-4e19-a9e8-6fc02a143129">
 
-ダウンロードした「.env」ファイルを、「KanazawaCupidProject-main」へ移動させる。
+ダウンロードした「.env」ファイルを、「KanazawaCupidProject-main」の中へ移動させる。
 
 <img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/7cbfb820-7fbd-4598-aff6-2cf26a6df4b7">
 
-### サークル以外のメンバー
+**3.2 サークル以外のメンバー向け**
 
 <img width="650" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/bf250f4e-39ad-4749-9381-e6fec3235616">
 
@@ -95,7 +95,8 @@ pipenv run start
 
 ### アプリの使い方
 
-<img width="397" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/4e23c94f-e563-433e-a3af-eb392a8d90db">
+<img width="437" alt="image" src="https://github.com/cccjaist/KanazawaCupidProject/assets/24668340/43b5ad1a-d5c8-4444-81ea-b687b56be042">
+
 
 #### 起動時：プロンプトの決定
 
@@ -119,35 +120,46 @@ Input the character number>>
 マイクに向かって話しかけるか、「会話内容」にテキストを打ち込んで「会話を追加」ボタンを押すことで、入力が行える。</br>
 アプリ内の「音声入力」をOFFにすると、音声入力が行われなくなる。
 
-#### ChatGPTに尋ねる方法
+#### ChatGPTへ質問する方法
 
-「君はどう思う？」ボタンを入力することでchatGPTへ意見を聞くことができる。</br>
-アプリ内の表情が横を向いているときは、通信処理を行っている最中である。<br/>
+ChatGPTへの質問は、問いかけを行う場合と反論を行わせる場合の2つの種類がある。
+
+##### 問いかける場合
+
+「君はどう思う？」ボタンを入力することでChatGPTへ意見を聞くことができる。</br>
+アプリ内の表情が横を向いているときは、通信処理を行っている最中である。通信処理の最中は、問いかける形のボタンを押すことはできない。<br/>
 通信処理が終了すると、その返信を声に出して話してくれる。<br/>
-質問内容が不適切でchatGPTから長い返答が返ってきた場合や、パソコンのスペックが足りず動作に時間がかかる場合は、エラーメッセージを話す。
+質問内容が不適切でchatGPTから長い返答が返ってきた場合や、パソコンのスペックが足りず動作に時間がかかる場合は、エラーメッセージを話す。<br/>
+会話の返答は、画面上部にあるテキストボックスの中に表示される。
 
-#### ChatGPTに反論させる方法
+##### 反論させたい場合
 
-「反論して！」ボタンを入力することでchatGPTへ反論がないか聞くことができる。</br>
+「反論して！」ボタンを入力することでChatGPTへ反論がないか聞くことができる。</br>
 アプリ内の表情が横を向いているときは、通信処理を行っている最中である。<br/>
+通信処理の最中は、問いかける形のボタンを押すことはできない。<br/>
 通信処理が終了すると、その返信を声に出して話してくれる。<br/>
-質問内容が不適切でchatGPTから長い返答が返ってきた場合や、パソコンのスペックが足りず動作に時間がかかる場合は、エラーメッセージを話す。
+質問内容が不適切でchatGPTから長い返答が返ってきた場合や、パソコンのスペックが足りず動作に時間がかかる場合は、エラーメッセージを話す。<br/>
+会話の返答は、画面上部にあるテキストボックスの中に表示される。
+
+#### 定期的な話題提供
+
+7分ごとにアラームが鳴ると、会話上部にあるテキストボックスに話題の提供が行われる。内容はランダム。
 
 #### ログの閲覧
 
 「logs」フォルダの中にはアプリのエラー、これまでの会話内容、chatGPTからの返答が記載されているログがある。
 
-#### error_logs
+##### error_logs
 
 アプリで発生したエラーに関するログが記載されている。ファイル名は`error_(アプリを起動した時間)yyyy_mm_dd_HH_MM.log`である。
 
-#### message_logs
+##### message_logs
 
 会話内容(音声入力またはテキスト入力された文章)のログが記載されている。ファイル名は`message_(アプリを起動した時間)yyyy_mm_dd_HH_MM.log`である。</br>
 `message_(アプリを起動した時間)yyyy_mm_dd_HH_MM.log`がある場合もあるが、これはアプリが異常終了した場合、本来消去されるはずだったファイルが残ってしまっている状態である。<br/>
 tmpファイルの中身を同時刻の`.log`ファイルに書き加えてから消去することをお勧めする。
 
-#### response_logs
+##### response_logs
 
 chatGPTからの返答ログが記載されている。ファイル名は`response_(アプリを起動した時間)yyyy_mm_dd_HH_MM.log`である。
 
@@ -155,3 +167,15 @@ chatGPTからの返答ログが記載されている。ファイル名は`respon
 
 アプリ内の「会話を終了する」ボタンをクリックする。<br/>
 「×を押してアプリを終了してください」との表示が出るので、アプリを閉じる。
+
+## クレジット提供
+
+アプリ開発に当たり、多くの素材を利用させていただきました。感謝します。
+
+- [ずんだもん立ち絵素材改](https://seiga.nicovideo.jp/seiga/im11148236) 作者：坂本アヒル様
+- [東北ずん子立ち絵素材ver1.1.2](https://seiga.nicovideo.jp/seiga/im10886085?ref=pc_watch_contentstree_parent) 作者：こーすけさんたまりあ様
+- [メイド服の少女](https://nanamiyuki.com/archives/6461) 作者：七三ゆき様
+- [立ち小夜/SAYO素材](https://seiga.nicovideo.jp/seiga/im11095609) 作者：akihiyo様
+- [フリー男性立ち絵素材 サラリーマン風男性](https://booth.pm/ja/items/3252647) 作者：RAIKO様
+- [魔王魂 ワンポイント23](https://maou.audio/se_onepoint23/)
+
